@@ -1,8 +1,0 @@
-name = islandora_bookviewer
-dependencies[] = fedora_repository
-dependencies[] = tabs
-dependencies[] = islandora_solr_search
-description = Islandora Bookviewer based on the archive.org bookviewer.
-package = Islandora
-version = 6.x-dev
-core = 6.x
