@@ -1,6 +1,6 @@
 div#BookReader {
   position: static;
-  overflow-y: hidden;
+  overflow: visible;
 }
 div#BRtoolbar {
   position: relative;

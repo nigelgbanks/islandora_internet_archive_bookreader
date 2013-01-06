@@ -569,4 +569,21 @@ function IslandoraBookReader(settings) {
     }
   }
 
+  /**
+   * This call back bind's handlers to various controls in the viewer. Performs
+   * the default behaviour and add an additional navigation handler that hides
+   * the viewer's toolbars, but otherwise allows tooltips to appear outside the
+   * interface.
+   */
+  IslandoraBookReader.prototype.bindNavigationHandlers = function() {
+    BookReader.prototype.bindNavigationHandlers.apply(this);
+    $('.BRnavCntl').click(function(){
+      if ($('#BRnavCntlBtm').hasClass('BRdn')) {
+        $('#BookReader').css('overflow', 'visible');
+      }
+      else {
+        $('#BookReader').css('overflow', 'hidden');
+      }
+    });
+  }
 })(jQuery);
