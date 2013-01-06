@@ -71,7 +71,7 @@ function IslandoraBookReader(settings) {
    *   The width in pixels of the given page.
    */
   IslandoraBookReader.prototype.getPageWidth = function(index) {
-    return this.settings.width;
+    return parseInt(this.settings.width);
   }
 
   /**
@@ -84,7 +84,7 @@ function IslandoraBookReader(settings) {
    *   The height in pixels of the given page.
    */
   IslandoraBookReader.prototype.getPageHeight = function(index) {
-    return this.settings.height;
+    return parseInt(this.settings.height);
   }
 
   /**
@@ -95,29 +95,6 @@ function IslandoraBookReader(settings) {
    */
   IslandoraBookReader.prototype.searchEnabled = function() {
     return this.settings.searchUri != null;
-  }
-
-  /**
-   * Gets the reduce rate for the single page view, this is used to scale the
-   * image to fit into the viewer window.
-   *
-   * @return int
-   *   The width reduce rate.
-   */
-  IslandoraBookReader.prototype.onePageGetAutofitWidth = function() {
-    var widthPadding = 20;
-    return (this.getMedianPageSize().width) / ($('#BRcontainer').attr('clientWidth') - widthPadding * 2);
-  }
-
-  /**
-   * Gets the reduce rate for the single page view, this is used to scale the
-   * image to fit into the viewer window.
-   *
-   * @return int
-   *   The height reduce rate.
-   */
-  IslandoraBookReader.prototype.onePageGetAutofitHeight = function() {
-    return (this.getMedianPageSize().height) / ($('#BRcontainer').attr('clientHeight') - this.padding * 2);
   }
 
   /**
