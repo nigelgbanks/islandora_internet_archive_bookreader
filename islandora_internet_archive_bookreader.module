@@ -24,7 +24,7 @@ function islandora_internet_archive_bookreader_menu() {
       'page callback' => 'islandora_internet_archive_bookreader_get_page_text',
       'page arguments' => array(1),
       'access callback' => 'islandora_object_access_callback',
-      'access arguments' => array(FEDORA_VIEW, 1),
+      'access arguments' => array(FEDORA_OBJECT_VIEW, 1),
       'file' => 'includes/text.callback.inc',
       'type' => MENU_CALLBACK,
     ),
@@ -32,7 +32,7 @@ function islandora_internet_archive_bookreader_menu() {
       'page callback' => 'islandora_internet_archive_bookreader_search',
       'page arguments' => array(1, 2),
       'access callback' => 'user_access',
-      'access arguments' => array(FEDORA_VIEW),
+      'access arguments' => array(FEDORA_OBJECT_VIEW),
       'file' => 'includes/search.callback.inc',
       'type' => MENU_CALLBACK,
     )
