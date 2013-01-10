@@ -154,19 +154,12 @@ function islandora_internet_archive_bookreader_populate_boxes($pid, $page, $term
   if (!($xml = @simplexml_load_string($object['ENCODED_OCR']->content))) {
     return array();
   }
-  $namespaces = $xml->getDocNamespaces();
-  // tesseract does not add a namespace so check for one
-  $span = 'span';
-  if (count($namespaces) > 0) {
-    $xml->registerXPathNamespace('ns', $namespaces['']);
-    $span = 'ns:span';
-  }
   $lower_term = strtolower($term);
   $lower_term = urldecode($lower_term);
   $terms = explode(' ', $lower_term);
   $boxes = array();
   foreach ($terms as $term) {
-    $matches = $xml->xpath("//{$span}[.='{$term}']");
+    $matches = $xml->xpath("//node()[local-name() = 'span'][translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{$term}']");
     foreach ($matches as $match) {
       $bbox = (string) $match['title'];
       $values = explode(' ', $bbox);
