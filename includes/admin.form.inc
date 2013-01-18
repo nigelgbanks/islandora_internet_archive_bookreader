@@ -2,7 +2,6 @@
 
 /**
  * @file
- *
  * Handles the display/submission of the admin settings form for this module.
  */
 
@@ -36,29 +35,29 @@ function islandora_internet_archive_bookreader_admin_settings_form(array $form, 
         'callback' => 'islandora_internet_archive_bookreader_admin_settings_form_djatoka_ajax_callback',
         'wrapper' => 'djatoka-path-wrapper',
         'effect' => 'fade',
-        'event' => 'change'
-      )
+        'event' => 'change',
+      ),
     ),
     'islandora_internet_archive_bookreader_compression' => array(
       '#type' => 'textfield',
       '#title' => t('The djatoka image compression level'),
       '#description' => t('The level of compression we want djatoka to use when creating the image, usually set at 4 or 5.'),
       '#element_validate' => array('element_validate_number'),
-      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_compression', '4')
+      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_compression', '4'),
     ),
     'islandora_internet_archive_bookreader_ocr_field' => array(
       '#access' => $solr_enabled,
       '#type' => 'textfield',
       '#title' => t('SOLR full text field name'),
       '#description' => t('The SOLR field used for full text search.'),
-      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_ocr_field', 'OCR.OCR')
+      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_ocr_field', 'OCR.OCR'),
     ),
     'islandora_internet_archive_bookreader_ocr_filter_field' => array(
       '#access' => $solr_enabled,
       '#type' => 'textfield',
       '#title' => t('Solr field that has the relationship to the book object pid'),
       '#description' => t('When we search within a book we need to know the pid of the book. This would be the solr field that contains the book pid for each page object.'),
-      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_ocr_filter_field', 'rels.isMemberOf')
+      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_ocr_filter_field', 'rels.isMemberOf'),
     ),
     'islandora_internet_archive_bookreader_solr_result_count' => array(
       '#access' => $solr_enabled,
@@ -66,16 +65,16 @@ function islandora_internet_archive_bookreader_admin_settings_form(array $form, 
       '#title' => t('The maximum number of results to return in a solr query'),
       '#description' => t('The maximum number of pages that will be returned by a full text search.'),
       '#element_validate' => array('element_validate_number'),
-      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_solr_result_count', '32')
+      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_solr_result_count', '32'),
     ),
     'islandora_internet_archive_bookreader_sequence_number' => array(
       '#access' => $solr_enabled,
       '#type' => 'textfield',
       '#title' => t('A field that holds the page sequence numbers'),
       '#description' => t('This field should contain the page or sequence number of each page/image.'),
-      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_sequence_number', 'rels.isSequenceNumber')
+      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_sequence_number', 'rels.isSequenceNumber'),
     ),
-   );
+  );
   return system_settings_form($form);
 }
 
@@ -104,7 +103,7 @@ function islandora_internet_archive_bookreader_admin_settings_form_djatoka_avail
 }
 
 /**
- * Ajax callback for the djatoka url textfield
+ * Ajax callback for the djatoka url textfield.
  *
  * @param array $form
  *   The Drupal form definition.

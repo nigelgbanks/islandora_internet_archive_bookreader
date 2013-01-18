@@ -2,7 +2,6 @@
 
 /**
  * @file
- *
  * Any hooks/functions used by this modules theme's.
  */
 
@@ -42,14 +41,15 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
         'pages' => $variables['pages'],
         'pageCount' => count($variables['pages']),
         // Use the same width and height for all pages, we will probably have to
-        // change this in the future
+        // change this in the future.
         'height' => $page_data['height'],
         'width' => $page_data['width'],
       ),
     ), 'setting');
   drupal_add_css("$library_path/BookReader/BookReader.css");
   drupal_add_css("$module_path/css/islandora_internet_archive_bookreader.css");
-  // jquery 1.4.2 and ui 1.8.5 not being used in favor of the Drupal system.
+  // Included jQuery 1.4.2 and jQueryUI 1.8.5 are not being used in favor of
+  // the Drupal system versions.
   drupal_add_library('system', 'effects');
   drupal_add_library('system', 'ui.slider');
   drupal_add_library('system', 'ui.draggable');
@@ -72,8 +72,11 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
 function theme_islandora_internet_archive_bookreader_book_info(array $variables) {
   $object = $variables['object'];
   $fields = islandora_internet_archive_bookreader_info_fields($object);
-  $fields = array_map(function($o) { return implode('<br/>', $o); }, $fields);
-  $rows = array_map(null, array_keys($fields), array_values($fields));
+  $convert_to_string = function($o) {
+    return implode('<br/>', $o);
+  };
+  $fields = array_map($convert_to_string, $fields);
+  $rows = array_map(NULL, array_keys($fields), array_values($fields));
   $content = theme_table(array(
                'caption' => '',
                'empty' => t('No Information specified.'),
@@ -81,15 +84,12 @@ function theme_islandora_internet_archive_bookreader_book_info(array $variables)
                'colgroups' => array(),
                'header' => array(t('Field'), t('Values')),
                'rows' => $rows,
-               'sticky' => FALSE,
-             )
-  );
+               'sticky' => FALSE));
   return $content;
 }
 
 /**
- * Retrieves an array of fields to display in the BookReader's "info"
- * modal dialog box.
+ * Retrieves fields to display in the BookReader's "info" modal dialog box.
  *
  * @param FedoraObject $object
  *   The object to fetch the information from.
@@ -97,6 +97,7 @@ function theme_islandora_internet_archive_bookreader_book_info(array $variables)
  * @return array
  *   Any array of fields where the key is the label and the second the
  *   fields value(s).
+ *
  * @code
  *   array(
  *     'label' => array('value', 'value')
@@ -125,18 +126,21 @@ function islandora_internet_archive_bookreader_info_fields(FedoraObject $object)
     'City Section' => '//mods:citySection',
     'Use and Reproduction' => '//mods:accessCondition[@type="useAndReproduction"]',
     'Restrictions on Access' => '//mods:accessCondition[@type="restrictionOnAccess"]',
-    'Physical Location' => '//mods:physicalLocation'
+    'Physical Location' => '//mods:physicalLocation',
   );
   $xml = simplexml_load_string($object['MODS']->content);
   $xml->registerXPathNamespace('mods', 'http://www.loc.gov/mods/v3');
-  $to_string = function($o) { return (string) $o; };
+  $to_string = function($o) {
+    return (string) $o;
+  };
   // Query each context node with the given xpath.
   $query_each_context = function (array $contexts, $xpath) {
+    $query = function(&$context, $key, $xpath) {
+      $context->registerXPathNamespace('mods', 'http://www.loc.gov/mods/v3');
+      $context = $context->xpath($xpath);
+    };
     // Map values to each context node.
-    array_walk($contexts, function(&$context, $key, $xpath) {
-        $context->registerXPathNamespace('mods', 'http://www.loc.gov/mods/v3');
-        $context = $context->xpath($xpath);
-      }, $xpath);
+    array_walk($contexts, $query, $xpath);
     // Flatten to an array of values.
     return call_user_func_array('array_merge', $contexts);
   };

@@ -1,6 +1,5 @@
 /**
  * @file
- *
  * IslandoraBookReader is derived from the Internet Archive BookReader class.
  */
 

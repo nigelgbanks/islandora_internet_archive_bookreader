@@ -2,20 +2,18 @@
 
 /**
  * @file
- *
  * Handles the search callback.
  */
 
 /**
- * Performs a solr search for the given term within the given book object's
- * pages using SOLR. Returns a JSON object for use in the Internet Archive
- * BookReader.
+ * Performs a solr search for the given term within the given book.
  *
+ * Prints a JSON object repersenting the results.
  * This function exits.
  *
  * @param string $object_id
  *   The PID of the book object.
- * @param type $ocr_term
+ * @param string $term
  *   The text to search for within the OCR'ed text.
  */
 function islandora_internet_archive_bookreader_search($object_id, $term) {
@@ -32,12 +30,12 @@ function islandora_internet_archive_bookreader_search($object_id, $term) {
  * Queries SOLR for all occurrences of the given term within the given book.
  *
  * @param string $object_id
- *  The PID of the book to search within.
+ *   The PID of the book to search within.
  * @param string $term
- *  The term to search within the given book.
+ *   The term to search within the given book.
  *
  * @return array
- *  The results of the SOLR search.
+ *   The results of the SOLR search.
  */
 function islandora_internet_archive_bookreader_query_solr($object_id, $term) {
   $url = islandora_internet_archive_bookreader_get_solr_search_url($object_id, $term);
@@ -49,8 +47,9 @@ function islandora_internet_archive_bookreader_query_solr($object_id, $term) {
 }
 
 /**
- * Maps the given SOLR results to BookReader results, also it generates word
- * coordinates where applicable.
+ * Maps the given SOLR results to BookReader results.
+ *
+ * Also it generates word coordinates where applicable.
  *
  * @param array $results
  *   The SOLR results to map.
@@ -82,7 +81,7 @@ function islandora_internet_archive_bookreader_map_solr_results_to_bookreader_re
           'page_height' => $page_data['height'],
           'boxes' => islandora_internet_archive_bookreader_populate_boxes($pid, $page, $term),
         ),
-      )
+      ),
     );
   }
   return $output;
@@ -92,9 +91,9 @@ function islandora_internet_archive_bookreader_map_solr_results_to_bookreader_re
  * Gets the SOLR search URL for the given search parameters.
  *
  * @param string $object_id
- *  The PID of the book to search within.
+ *   The PID of the book to search within.
  * @param string $term
- *  The term to search within the given book.
+ *   The term to search within the given book.
  *
  * @return string
  *   The SOLR search URL that will query for all occurances of the given term
@@ -107,7 +106,7 @@ function islandora_internet_archive_bookreader_get_solr_search_url($object_id, $
   $ocr_field = variable_get('islandora_internet_archive_bookreader_ocr_field', 'OCR.OCR');
   $ocr_filter_field = variable_get('islandora_internet_archive_bookreader_ocr_filter_field', 'rels.isMemberOf');
   $num_rows = variable_get('islandora_internet_archive_bookreader_solr_result_count', 32);
-  // Allow multiple words
+  // Allow multiple words.
   $term = htmlspecialchars(drupal_encode_path($term), ENT_QUOTES, 'utf-8', FALSE);
   $params = array(
     "qt={$request_handler}",
@@ -123,7 +122,7 @@ function islandora_internet_archive_bookreader_get_solr_search_url($object_id, $
     'hl.simple.pre={{{',
     'hl.simple.post=}}}',
     'hl.fragsize=200',
-    'wt=json'
+    'wt=json',
   );
   $url = "{$solr_url}/select/?" . implode('&', $params);
   $url_components = parse_url($url);
@@ -151,7 +150,8 @@ function islandora_internet_archive_bookreader_populate_boxes($pid, $page, $term
   if (!isset($object['ENCODED_OCR'])) {
     return array();
   }
-  if (!($xml = @simplexml_load_string($object['ENCODED_OCR']->content))) {
+  $xml = @simplexml_load_string($object['ENCODED_OCR']->content);
+  if (!$xml) {
     return array();
   }
   $lower_term = strtolower($term);
@@ -168,7 +168,7 @@ function islandora_internet_archive_bookreader_populate_boxes($pid, $page, $term
         't' => intval($values[2]) - 15,
         'r' => intval($values[3]) + 20,
         'b' => intval($values[4]) + 15,
-        'page' => $page
+        'page' => $page,
       );
     }
   }
