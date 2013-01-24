@@ -1,6 +1,31 @@
+/**
+ * Undo the global css settings from BookReader.css.
+ */
+body, h3, a {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
 div#BookReader {
   position: static;
   overflow: visible;
+  vertical-align: baseline;
+  background-color: #9A9B9D;
+  font-size: 67.5%;
+  margin: 0;
+  padding: 0;
+}
+#BookReader h3 {
+  font-size: 20px;
+  font-family:  "News Gothic MT","Trebuchet MS",Geneva,Helvetica,sans-serif;
+  font-weight: 700;
+  color: #dedede;
+}
+#BookReader a {
+  outline: none;
 }
 div#BRtoolbar {
   position: relative;
