@@ -246,9 +246,10 @@ function IslandoraBookReader(settings) {
         timeout = 5000;
       }
       $(this.popup).html(errStr);
+      var that = this;
       setTimeout(function(){
-        $(this.popup).fadeOut('slow', function() {
-          this.removeProgressPopup();
+        $(that.popup).fadeOut('slow', function() {
+          that.removeProgressPopup();
         })
       },timeout);
       return;
