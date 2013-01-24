@@ -35,6 +35,20 @@ div.BRpagediv1up {
 .BRicon.full_text:hover {
   background-position: -1280px 0px;
 }
+button.BRicon {
+  background-image: url(../images/BRicons.png);
+}
+button.BRicon:hover {
+  background-image: url(../images/BRicons.png);
+}
+button#btnSrch {
+  background-image: none;
+  padding: 0;
+  margin: 0;
+}
+button#btnSrch:hover {
+  background-image: none;
+}
 .textTop {
   font-size: 10px;
 }
