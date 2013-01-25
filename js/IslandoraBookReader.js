@@ -312,7 +312,7 @@ function IslandoraBookReader(settings) {
                    '.bookmark': 'Bookmark this page',
                    '.read': 'Read this book aloud',
                    '.share': 'Share this book',
-                   '.info': 'Page Text',
+                   '.info': 'Info',
                    '.full': 'Show fullscreen',
                    '.book_up': 'Page up',
                    '.book_down': 'Page down',
