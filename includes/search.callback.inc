@@ -159,7 +159,7 @@ function islandora_internet_archive_bookreader_populate_boxes($pid, $page, $term
   $terms = explode(' ', $lower_term);
   $boxes = array();
   foreach ($terms as $term) {
-    $matches = $xml->xpath("//node()[local-name() = 'span'][translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{$term}']");
+    $matches = $xml->xpath("//node()[local-name() = 'span'][translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{$term}']/..");
     foreach ($matches as $match) {
       $bbox = (string) $match['title'];
       $values = explode(' ', $bbox);
