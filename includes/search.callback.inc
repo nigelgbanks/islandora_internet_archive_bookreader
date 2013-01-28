@@ -165,9 +165,9 @@ function islandora_internet_archive_bookreader_populate_boxes($pid, $page, $term
       $values = explode(' ', $bbox);
       $boxes[] = array(
         'l' => intval($values[1]),
-        't' => intval($values[2]) - 15,
-        'r' => intval($values[3]) + 20,
-        'b' => intval($values[4]) + 15,
+        't' => intval($values[2]),
+        'r' => intval($values[3]),
+        'b' => intval($values[4]),
         'page' => $page,
       );
     }
