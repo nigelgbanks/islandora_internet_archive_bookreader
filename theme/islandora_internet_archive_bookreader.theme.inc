@@ -16,7 +16,6 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   $module_path = drupal_get_path('module', 'islandora_internet_archive_bookreader');
   $search_uri = module_exists('islandora_solr') ? url("internet_archive_bookreader_search/{$object->id}/TERM", array('absolute' => TRUE)) : NULL;
   $resource_uri = url("islandora/object/PID/datastream/{$dsid}/view", array('absolute' => TRUE));
-  $page_data = count($variables['pages']) ? islandora_internet_archive_bookreader_get_page_data($variables['pages'][0]) : array('width' => 0, 'height' => 0);
   // Get token to allow access to XACML protected datastreams if necessary.
   if (isset($object['POLICY'])) {
     module_load_include('inc', 'islandora', 'includes/islandora_authtokens');
@@ -40,10 +39,6 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
         'pageProgression' => $variables['page_progression'],
         'pages' => $variables['pages'],
         'pageCount' => count($variables['pages']),
-        // Use the same width and height for all pages, we will probably have to
-        // change this in the future.
-        'height' => $page_data['height'],
-        'width' => $page_data['width'],
       ),
     ), 'setting');
   drupal_add_css("$library_path/BookReader/BookReader.css");

@@ -9,6 +9,7 @@
 function IslandoraBookReader(settings) {
   BookReader.call(this);
   this.settings = settings;
+  this.metadata = {};
   this.numLeafs = settings.pageCount;
   this.bookTitle = settings.label.substring(0,97) + '...';
   this.bookUrl = document.location.toString();
@@ -61,6 +62,45 @@ function IslandoraBookReader(settings) {
   }
 
   /**
+   * For a given "accessible page index" return metadata from Djatoka.
+   *
+   * @param int index
+   *   The index of the page.
+   *
+   * @return object
+   *   An object contatining the following string fields:
+   *   - identifier: The URL to the resource.
+   *   - imagefile: The path to the temp file being served.
+   *   - width: The width of the image in pixels.
+   *   - height: The width of the image in pixels.
+   *   - dwtLevels: ???
+   *   - levels: ???
+   *   - compositingLayerCount: ???
+   */
+  IslandoraBookReader.prototype.getPageMetadata = function(index) {
+    var pid = this.getPID(index);
+    var resource_uri = this.getResourceUri(pid);
+    var url = this.getDjatokaUri(resource_uri);
+    url += '&svc_id=info:lanl-repo/svc/getMetadata';
+    var width = this.settings.width;
+    var ret = {};
+    jQuery.ajax({
+      url: url,
+      dataType: 'json',
+      success: function(data, textStatus, jqXHR) {
+        ret = data;
+        ret.width = parseInt(ret.width);
+        ret.height = parseInt(ret.height);
+        ret.dwtLevels = parseInt(ret.dwtLevels);
+        ret.levels = parseInt(ret.levels);
+        ret.compositingLayerCount = parseInt(ret.compositingLayerCount);
+      },
+      async: false,
+    });
+    return ret;
+  }
+
+  /**
    * Gets the width of the given page.
    *
    * @param int index
@@ -70,7 +110,10 @@ function IslandoraBookReader(settings) {
    *   The width in pixels of the given page.
    */
   IslandoraBookReader.prototype.getPageWidth = function(index) {
-    return parseInt(this.settings.width);
+    if (typeof this.metadata[index] == 'undefined') {
+      this.metadata[index] = this.getPageMetadata(index);
+    }
+    return this.metadata[index].width;
   }
 
   /**
@@ -83,7 +126,10 @@ function IslandoraBookReader(settings) {
    *   The height in pixels of the given page.
    */
   IslandoraBookReader.prototype.getPageHeight = function(index) {
-    return parseInt(this.settings.height);
+    if (typeof this.metadata[index] == 'undefined') {
+      this.metadata[index] = this.getPageMetadata(index);
+    }
+    return this.metadata[index].height;
   }
 
   /**
@@ -109,7 +155,6 @@ function IslandoraBookReader(settings) {
     var uri = this.settings.djatokaUri;
     uri += uri.charAt(uri.length-1) == '/' ? '' : '/';
     uri += 'resolver?url_ver=Z39.88-2004&rft_id=' + resource_uri;
-    uri += this.getDjatokaUriParams();
     return uri;
   };
 
@@ -153,7 +198,9 @@ function IslandoraBookReader(settings) {
   IslandoraBookReader.prototype.getPageURI = function(index, reduce, rotate) {
     var pid = this.getPID(index);
     var resource_uri = this.getResourceUri(pid);
-    return this.getDjatokaUri(resource_uri);
+    var uri = this.getDjatokaUri(resource_uri);
+    uri += this.getDjatokaUriParams();
+    return uri;
   }
 
   /**
