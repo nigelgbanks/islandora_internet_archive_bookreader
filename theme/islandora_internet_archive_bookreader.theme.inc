@@ -20,7 +20,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   if (isset($object['POLICY'])) {
     module_load_include('inc', 'islandora', 'includes/islandora_authtokens');
     $token = islandora_get_object_token($object->id, $dsid, 2);
-    $resource_uri = url("islandora/object/{$islandora_object->id}/datastream/{$dsid}/view", array(
+    $resource_uri = url("islandora/object/PID/datastream/{$dsid}/view", array(
                       'absolute' => TRUE,
                       'query' => array('token' => $token),
                     ));
@@ -32,6 +32,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
         'label' => $object->label,
         'searchUri' => $search_uri,
         'textUri' => url('internet_archive_bookreader_text/PID', array('absolute' => TRUE)),
+        'dimensionsUri' => url('internet_archive_bookreader_dimensions/PID', array('absolute' => TRUE)),
         'djatokaUri' => variable_get('islandora_internet_archive_bookreader_djatoka_url', 'http://localhost:8080/adore-djatoka'),
         'resourceUri' => $resource_uri,
         'imagesFolderUri' => url("$library_path/BookReader/images/", array('absolute' => TRUE)),

@@ -9,7 +9,7 @@
 function IslandoraBookReader(settings) {
   BookReader.call(this);
   this.settings = settings;
-  this.metadata = {};
+  this.dimensions = {};
   this.numLeafs = settings.pageCount;
   this.bookTitle = settings.label.substring(0,97) + '...';
   this.bookUrl = document.location.toString();
@@ -69,35 +69,27 @@ function IslandoraBookReader(settings) {
    *
    * @return object
    *   An object contatining the following string fields:
-   *   - identifier: The URL to the resource.
-   *   - imagefile: The path to the temp file being served.
    *   - width: The width of the image in pixels.
    *   - height: The width of the image in pixels.
-   *   - dwtLevels: ???
-   *   - levels: ???
-   *   - compositingLayerCount: ???
+   *   If this function fails the values for each field will be 0.
    */
-  IslandoraBookReader.prototype.getPageMetadata = function(index) {
+  IslandoraBookReader.prototype.getPageDimensions = function(index) {
+    var dimensions = { width: 0, height: 0 };
     var pid = this.getPID(index);
-    var resource_uri = this.getResourceUri(pid);
-    var url = this.getDjatokaUri(resource_uri);
-    url += '&svc_id=info:lanl-repo/svc/getMetadata';
-    var width = this.settings.width;
-    var ret = {};
+    if(typeof pid == 'undefined') {
+      return dimensions;
+    }
+    var url = this.getDimensionsUri(pid);
     jQuery.ajax({
       url: url,
       dataType: 'json',
       success: function(data, textStatus, jqXHR) {
-        ret = data;
-        ret.width = parseInt(ret.width);
-        ret.height = parseInt(ret.height);
-        ret.dwtLevels = parseInt(ret.dwtLevels);
-        ret.levels = parseInt(ret.levels);
-        ret.compositingLayerCount = parseInt(ret.compositingLayerCount);
+        dimensions.width = parseInt(data.width);
+        dimensions.height = parseInt(data.height);
       },
       async: false,
     });
-    return ret;
+    return dimensions;
   }
 
   /**
@@ -110,10 +102,10 @@ function IslandoraBookReader(settings) {
    *   The width in pixels of the given page.
    */
   IslandoraBookReader.prototype.getPageWidth = function(index) {
-    if (typeof this.metadata[index] == 'undefined') {
-      this.metadata[index] = this.getPageMetadata(index);
+    if (typeof this.dimensions[index] == 'undefined') {
+      this.dimensions[index] = this.getPageDimensions(index);
     }
-    return this.metadata[index].width;
+    return this.dimensions[index].width;
   }
 
   /**
@@ -126,10 +118,10 @@ function IslandoraBookReader(settings) {
    *   The height in pixels of the given page.
    */
   IslandoraBookReader.prototype.getPageHeight = function(index) {
-    if (typeof this.metadata[index] == 'undefined') {
-      this.metadata[index] = this.getPageMetadata(index);
+    if (typeof this.dimensions[index] == 'undefined') {
+      this.dimensions[index] = this.getPageDimensions(index);
     }
-    return this.metadata[index].height;
+    return this.dimensions[index].height;
   }
 
   /**
@@ -182,6 +174,22 @@ function IslandoraBookReader(settings) {
    */
   IslandoraBookReader.prototype.getResourceUri = function(pid) {
     var uri = this.settings.resourceUri;
+    uri = uri.replace('PID', pid);
+    return uri;
+  };
+
+  /**
+   * Gets the URI to the dimensions callback for the given page.
+   *
+   * @param string pid
+   *   The id of the object containing the resource.
+   *
+   * @return string
+   *   The Dimensions URI of the callback, to be used to fetch the pages
+   *   dimension.
+   */
+  IslandoraBookReader.prototype.getDimensionsUri = function(pid) {
+    var uri = this.settings.dimensionsUri;
     uri = uri.replace('PID', pid);
     return uri;
   };
