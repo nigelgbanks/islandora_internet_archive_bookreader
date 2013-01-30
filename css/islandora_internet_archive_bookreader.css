@@ -87,9 +87,9 @@ div.BRprogresspopup {
 }
 .textRight {
   float: right;
-  width: 270px;
+  width: 50%;
 }
 .textLeft {
   float: left;
-  width: 270px;
+  width: 50%;
 }

@@ -587,8 +587,8 @@ function IslandoraBookReader(settings) {
    * Appends content onto the "FullText" module dialog box.
    */
   IslandoraBookReader.prototype.buildFullTextDiv = function(jFullTextDiv) {
-    jFullTextDiv.height(700);
-    jFullTextDiv.width(400);
+    jFullTextDiv.find('.BRfloatMeta').height(600);
+    jFullTextDiv.find('.BRfloatMeta').width(600);
     if (1 == this.mode) {
       var index = this.currentIndex();
       var pid = this.getPID(index);
