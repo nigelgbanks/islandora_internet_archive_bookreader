@@ -640,4 +640,19 @@ function IslandoraBookReader(settings) {
       }
     });
   }
+
+  /**
+   * Update the location hash only change it when it actually changes, as some
+   * browsers can't handle that shit.
+   */
+  IslandoraBookReader.prototype.updateLocationHash = function() {
+    var newHash = this.fragmentFromParams(this.paramsFromCurrent());
+    if (this.oldLocationHash != newHash) {
+      window.location.hash = newHash;
+    }
+    // This is the variable checked in the timer.  Only user-generated changes
+    // to the URL will trigger the event.
+    this.oldLocationHash = newHash;
+  }
+
 })(jQuery);
