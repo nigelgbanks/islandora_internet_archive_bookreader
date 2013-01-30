@@ -217,10 +217,10 @@ function islandora_internet_archive_bookreader_get_solr_search_url($object_id, $
  */
 function islandora_internet_archive_bookreader_populate_boxes($pid, $page, $term) {
   $object = islandora_object_load($pid);
-  if (!isset($object['ENCODED_OCR'])) {
+  if (!isset($object['HOCR'])) {
     return array();
   }
-  $xml = @simplexml_load_string($object['ENCODED_OCR']->content);
+  $xml = @simplexml_load_string($object['HOCR']->content);
   if (!$xml) {
     return array();
   }
@@ -229,7 +229,7 @@ function islandora_internet_archive_bookreader_populate_boxes($pid, $page, $term
   $terms = explode(' ', $lower_term);
   $boxes = array();
   foreach ($terms as $term) {
-    $matches = $xml->xpath("//node()[local-name() = 'span'][translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{$term}']/..");
+    $matches = $xml->xpath("//node()[local-name() = 'span'][translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{$term}']");
     foreach ($matches as $match) {
       $bbox = (string) $match['title'];
       $values = explode(' ', $bbox);
