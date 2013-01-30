@@ -39,6 +39,9 @@ div#BRnav {
   position: relative;
   margin-top: -40px;
 }
+div#BRfulltext .BRfloatMeta {
+  overflow: scroll;
+}
 div.BRpagediv1up {
  overflow: visible;
 }
