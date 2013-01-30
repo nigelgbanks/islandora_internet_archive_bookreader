@@ -138,7 +138,7 @@ function islandora_internet_archive_bookreader_map_solr_results_to_bookreader_re
     // @todo Index the page width and height in solr, rather than fetch from
     // djatoka
     $pid = $doc['PID'];
-    $page_data = islandora_internet_archive_bookreader_get_page_dimensions($pid);
+    $page_data = islandora_internet_archive_bookreader_get_page_dimensions(islandora_object_load($pid));
     $page = $doc["$sequence_field"][0];
     $highlighting = $results['highlighting'];
     $highlighted_text = $highlighting[$pid][$ocr_field][0];
