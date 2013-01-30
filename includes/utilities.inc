@@ -229,18 +229,48 @@ function islandora_internet_archive_bookreader_populate_boxes($pid, $page, $term
   $terms = explode(' ', $lower_term);
   $boxes = array();
   foreach ($terms as $term) {
-    $matches = $xml->xpath("//node()[local-name() = 'span'][translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{$term}']");
+    $matches = $xml->xpath("//node()[translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{$term}']");
     foreach ($matches as $match) {
-      $bbox = (string) $match['title'];
-      $values = explode(' ', $bbox);
-      $boxes[] = array(
-        'l' => intval($values[1]),
-        't' => intval($values[2]),
-        'r' => intval($values[3]),
-        'b' => intval($values[4]),
-        'page' => $page,
-      );
+      $bounding_box = islandora_internet_archive_bookreader_get_word_bounding_box($match);
+      if ($bounding_box) {
+        $box = array_intersect_key($bounding_box, array('l' => 0, 't' => 0, 'r' => 0, 'b' => 0));
+        $box['page'] = $page;
+        $boxes[] = $box;
+      }
     }
   }
   return $boxes;
+}
+
+function islandora_internet_archive_bookreader_get_word_bounding_box(SimpleXMLElement $element) {
+  $bounding_box = islandora_internet_archive_bookreader_get_bounding_box($element);
+  if ($bounding_box) {
+    if ($bounding_box['class'] == 'ocrx_word') {
+      return $bounding_box;
+    }
+    return FALSE;
+  }
+  $parent_element = array_pop($element->xpath('..'));
+  if ($parent_element) {
+    return islandora_internet_archive_bookreader_get_word_bounding_box($parent_element);
+  }
+  return FALSE;
+}
+
+function islandora_internet_archive_bookreader_get_bounding_box(SimpleXMLElement $element) {
+  if (isset($element['title'])) {
+    // The coordinates are stored in the title attribute in the following
+    // format "bbox 539 1210 623 1235"
+    $bounding_box = (string) $element['title'];
+    $coordinates = explode(' ', $bounding_box);
+    return array(
+      'id' => isset($element['id']) ? (string) $element['id'] : NULL,
+      'class' => isset($element['class']) ? (string) $element['class'] : NULL,
+      'l' => intval($coordinates[1]),
+      't' => intval($coordinates[2]),
+      'r' => intval($coordinates[3]),
+      'b' => intval($coordinates[4]),
+    );
+  }
+  return FALSE;
 }
