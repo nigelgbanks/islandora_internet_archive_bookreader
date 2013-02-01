@@ -170,35 +170,36 @@ function islandora_internet_archive_bookreader_map_solr_results_to_bookreader_re
  *   within the given book.
  */
 function islandora_internet_archive_bookreader_get_solr_search_url($object_id, $term) {
-  $solr_url = variable_get('islandora_solr_url', 'localhost:8080/solr');
-  $request_handler = variable_get('islandora_solr_request_handler', '');
-  $sequence_field = variable_get('islandora_internet_archive_bookreader_sequence_number', 'rels.isSequenceNumber');
+  module_load_include('inc', 'islandora_solr', 'includes/common');
+  $base_url = variable_get('islandora_solr_url', 'localhost:8080/solr') . '/select/';
   $ocr_field = variable_get('islandora_internet_archive_bookreader_ocr_field', 'OCR.OCR');
   $ocr_filter_field = variable_get('islandora_internet_archive_bookreader_ocr_filter_field', 'rels.isMemberOf');
+  $sequence_field = variable_get('islandora_internet_archive_bookreader_sequence_number', 'rels.isSequenceNumber');
   $num_rows = variable_get('islandora_internet_archive_bookreader_solr_result_count', 32);
-  // Allow multiple words.
-  $term = htmlspecialchars(drupal_encode_path($term), ENT_QUOTES, 'utf-8', FALSE);
-  $params = array(
-    "qt={$request_handler}",
-    "q={$ocr_field}:\"{$term}\"",
-    "fq={$ocr_filter_field}:\"info:fedora/{$object_id}\"",
-    'version=2.2',
-    'start=0',
-    "rows={$num_rows}",
-    "fl=PID,{$sequence_field}",
-    'hl=true',
-    "hl.fl={$ocr_field}",
-    'hl.snippets=200',
-    'hl.simple.pre={{{',
-    'hl.simple.post=}}}',
-    'hl.fragsize=200',
-    'wt=json',
-  );
-  $url = "{$solr_url}/select/?" . implode('&', $params);
+  $url = url($base_url, array(
+           'query' => array(
+             'q' => implode(':', array($ocr_field, lesser_escape($term))),
+             'fq' => implode(':', array($ocr_filter_field, lesser_escape($object_id))),
+             'version' => '2.2',
+             'start' => '0',
+             'rows' => $num_rows,
+             'fl' => implode(',', array('PID', $sequence_field)),
+             'hl' => 'true',
+             'hl.fl' => $ocr_field,
+             'hl.snippets' => '200',
+             'hl.simple.pre' => '{{{',
+             'hl.simple.post' => '}}}',
+             'hl.fragsize' => '200',
+             'wt' => 'json',
+           ),
+           'absolute' => TRUE,
+           'external' => TRUE,
+         ));
+  // Seems to be a bug in url(), such that if both external and absolute are
+  // given then asbolute is ignored. Here we Default to http if they need https
+  // they should set it in the islandora solr config form.
   $url_components = parse_url($url);
-  // Default to http if they need https they should set it in the islandora solr
-  // config form.
-  $url = isset($url_components['scheme']) ? '' : 'http://' . $url;
+  $url = isset($url_components['scheme']) ? $url : 'http://' . $url;
   return $url;
 }
 
@@ -209,40 +210,61 @@ function islandora_internet_archive_bookreader_get_solr_search_url($object_id, $
  *   The PID of the page object to check.
  * @param string $page
  *   The page index.
- * @param string $term
- *   The term to fetch the coordinates for.
+ * @param string $terms
+ *   The terms to fetch the coordinates for. Terms Seperated by a single space.
  *
  * @return array
  *   The word coordinates for the given term and page.
  */
-function islandora_internet_archive_bookreader_populate_boxes($pid, $page, $term) {
+function islandora_internet_archive_bookreader_populate_boxes($pid, $page, $terms) {
   $object = islandora_object_load($pid);
   if (!isset($object['HOCR'])) {
     return array();
   }
-  $xml = @simplexml_load_string($object['HOCR']->content);
-  if (!$xml) {
-    return array();
-  }
-  $lower_term = strtolower($term);
-  $lower_term = urldecode($lower_term);
-  $terms = explode(' ', $lower_term);
+  $file = file_create_filename("{object->id}_HOCR.xml", 'temporary://');
+  $file = drupal_realpath($file);
+  $object['HOCR']->getContent($file);
+  $doc = new DOMDocument('1.0', 'UTF-8');
+  $doc->load($file);
+  $xpath = new DOMXPath($doc);
+  $xpath->registerNamespace("php", "http://php.net/xpath");
+  $xpath->registerPhpFunctions();
+  $terms = mb_strtolower($terms);
+  $terms = urldecode($terms);
+  $terms = explode(' ', $terms);
   $boxes = array();
   foreach ($terms as $term) {
-    $matches = $xml->xpath("//node()[translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{$term}']");
+    $matches = $xpath->query("//*[php:functionString('mb_strtolower', text()) = '{$term}']");
     foreach ($matches as $match) {
       $bounding_box = islandora_internet_archive_bookreader_get_word_bounding_box($match);
       if ($bounding_box) {
-        $box = array_intersect_key($bounding_box, array('l' => 0, 't' => 0, 'r' => 0, 'b' => 0));
+        // Only keep the values the viewer is interested in.
+        $box = array_intersect_key($bounding_box, array(
+                 'l' => 0,
+                 't' => 0,
+                 'r' => 0,
+                 'b' => 0));
         $box['page'] = $page;
         $boxes[] = $box;
       }
     }
   }
+  file_unmanaged_delete($file);
   return $boxes;
 }
 
-function islandora_internet_archive_bookreader_get_word_bounding_box(SimpleXMLElement $element) {
+/**
+ * Gets the bounding box for the given element.
+ *
+ * @param DOMElement $element
+ *   The element.
+ *
+ * @return array
+ *   The bounding box for the given element if found, FALSE otherwise.
+ *
+ * @see islandora_internet_archive_bookreader_get_bounding_box()
+ */
+function islandora_internet_archive_bookreader_get_word_bounding_box(DOMElement $element) {
   $bounding_box = islandora_internet_archive_bookreader_get_bounding_box($element);
   if ($bounding_box) {
     if ($bounding_box['class'] == 'ocrx_word') {
@@ -250,22 +272,37 @@ function islandora_internet_archive_bookreader_get_word_bounding_box(SimpleXMLEl
     }
     return FALSE;
   }
-  $parent_element = array_pop($element->xpath('..'));
-  if ($parent_element) {
-    return islandora_internet_archive_bookreader_get_word_bounding_box($parent_element);
+  if ($element->parentNode) {
+    return islandora_internet_archive_bookreader_get_word_bounding_box($element->parentNode);
   }
   return FALSE;
 }
 
-function islandora_internet_archive_bookreader_get_bounding_box(SimpleXMLElement $element) {
-  if (isset($element['title'])) {
+/**
+ * Gets the bounding box for the given element if defined.
+ *
+ * @param DOMElement $element
+ *   The element.
+ *
+ * @return array
+ *   An associative array as follows:
+ *   - id: The id of the given element.
+ *   - class: The class of the given element, 'ocrx_word', 'ocr_line', etc.
+ *   - l: The left most point of the element in pixels.
+ *   - t: The top most point of the element in pixels.
+ *   - r: The right most point of the element in pixels.
+ *   - b: The bottom most point of the element in pixels.
+ *  If the given element doesn't have a bounding box FALSE is returned.
+ */
+function islandora_internet_archive_bookreader_get_bounding_box(DOMElement $element) {
+  if ($element->hasAttribute('title')) {
     // The coordinates are stored in the title attribute in the following
     // format "bbox 539 1210 623 1235"
-    $bounding_box = (string) $element['title'];
+    $bounding_box = $element->getAttribute('title');
     $coordinates = explode(' ', $bounding_box);
     return array(
-      'id' => isset($element['id']) ? (string) $element['id'] : NULL,
-      'class' => isset($element['class']) ? (string) $element['class'] : NULL,
+      'id' => $element->hasAttribute('id') ? $element->getAttribute('id') : NULL,
+      'class' => $element->hasAttribute('class') ? $element->getAttribute('class') : NULL,
       'l' => intval($coordinates[1]),
       't' => intval($coordinates[2]),
       'r' => intval($coordinates[3]),
