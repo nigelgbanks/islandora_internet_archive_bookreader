@@ -144,22 +144,17 @@ function IslandoraBookReader(settings) {
    *   The Djatoka URI for the given resource URI.
    */
   IslandoraBookReader.prototype.getDjatokaUri = function(resource_uri) {
-    var uri = this.settings.djatokaUri;
-    uri += uri.charAt(uri.length-1) == '/' ? '' : '/';
-    uri += 'resolver?url_ver=Z39.88-2004&rft_id=' + resource_uri;
-    return uri;
-  };
-
-  /**
-   * Gets the parameters for the Djatoka URI.
-   *
-   * @return string
-   *   The parameters to appended onto the Djatoka URI.
-   */
-  IslandoraBookReader.prototype.getDjatokaUriParams = function() {
-    // @todo expose the parameters to the theme function, only compression
-    // is being used at the moment.
-    return '&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/png&svc.level=' + this.settings.compression + '&svc.rotate=0';
+    var base_uri = this.settings.djatokaUri;
+    var params = $.param({
+      'rft_id': resource_uri,
+      'url_ver': 'Z39.88-2004',
+      'svc_id': 'info:lanl-repo/svc/getRegion',
+      'svc_val_fmt': 'info:ofi/fmt:kev:mtx:jpeg2000',
+      'svc.format': 'image/png',
+      'svc.level': this.settings.compression,
+      'svc.rotate': 0,
+    });
+    return (base_uri + 'resolver?' + params);
   };
 
   /**
@@ -206,9 +201,7 @@ function IslandoraBookReader(settings) {
   IslandoraBookReader.prototype.getPageURI = function(index, reduce, rotate) {
     var pid = this.getPID(index);
     var resource_uri = this.getResourceUri(pid);
-    var uri = this.getDjatokaUri(resource_uri);
-    uri += this.getDjatokaUriParams();
-    return uri;
+    return this.getDjatokaUri(resource_uri);
   }
 
   /**
