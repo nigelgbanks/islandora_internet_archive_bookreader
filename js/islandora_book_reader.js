@@ -639,7 +639,7 @@ function IslandoraBookReader(settings) {
    * browsers can't handle that shit.
    */
   IslandoraBookReader.prototype.updateLocationHash = function() {
-    var newHash = this.fragmentFromParams(this.paramsFromCurrent());
+    var newHash = '#' + this.fragmentFromParams(this.paramsFromCurrent());
     if (this.oldLocationHash != newHash) {
       window.location.hash = newHash;
     }
