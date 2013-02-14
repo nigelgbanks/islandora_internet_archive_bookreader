@@ -58,7 +58,9 @@ function IslandoraBookReader(settings) {
    *   The PID the given page repersents.
    */
   IslandoraBookReader.prototype.getPID = function(index) {
-    return this.settings.pages[index];
+    if (this.settings.pages[index] != 'undefined') {
+      return this.settings.pages[index].pid;
+    }
   }
 
   /**
@@ -158,22 +160,6 @@ function IslandoraBookReader(settings) {
   };
 
   /**
-   * Gets the URI to the given objects resource.
-   *
-   * @param string pid
-   *   The id of the object containing the resource.
-   *
-   * @return string
-   *   The Resource URI of the image, to be displayed in the
-   *   viewer.
-   */
-  IslandoraBookReader.prototype.getResourceUri = function(pid) {
-    var uri = this.settings.resourceUri;
-    uri = uri.replace('PID', pid);
-    return uri;
-  };
-
-  /**
    * Gets the URI to the dimensions callback for the given page.
    *
    * @param string pid
@@ -200,7 +186,7 @@ function IslandoraBookReader(settings) {
    */
   IslandoraBookReader.prototype.getPageURI = function(index, reduce, rotate) {
     var pid = this.getPID(index);
-    var resource_uri = this.getResourceUri(pid);
+    var resource_uri = this.settings.pages[index].uri;
     return this.getDjatokaUri(resource_uri);
   }
 
