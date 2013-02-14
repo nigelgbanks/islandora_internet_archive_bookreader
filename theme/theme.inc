@@ -22,7 +22,8 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
     $token = islandora_get_object_token($page_pid, $dsid, 2);
 
     // TODO: Slap the widths/heights for pages in here, and make 'em be used in
-    //   on the JS side.
+    //   on the JS side...  Probably break out this structure generation into a
+    //   separate function?
     $pages[] = array(
       'pid' => $page_pid,
       'uri' => url("islandora/object/{$page_pid}/datastream/{$dsid}/view", array(
@@ -33,6 +34,8 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
       )),
     );
   }
+
+  global $base_url;
   drupal_add_js(array(
       'islandoraInternetArchiveBookReader' => array(
         'book' => $object->id,
@@ -42,7 +45,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
         'textUri' => url('internet_archive_bookreader_text/PID', array('absolute' => TRUE)),
         'dimensionsUri' => url('internet_archive_bookreader_dimensions/PID', array('absolute' => TRUE)),
         'djatokaUri' => variable_get('islandora_internet_archive_bookreader_djatoka_url', 'http://localhost:8080/adore-djatoka'),
-        'imagesFolderUri' => url("$library_path/BookReader/images/", array('absolute' => TRUE, 'external' => TRUE)),
+        'imagesFolderUri' => url("$base_url/$library_path/BookReader/images/", array('absolute' => TRUE, 'external' => TRUE)),
         'compression' => variable_get('islandora_internet_archive_bookreader_compression', '4'),
         'pageProgression' => $variables['page_progression'],
         'pages' => $pages,
