@@ -93,7 +93,7 @@ function IslandoraBookReader(settings) {
       // If we don't have one or the other, make a query out to Djatoka.
       if (typeof page.width == 'undefined' || typeof page.height == 'undefined') {
         var pid = page.pid;
-        if(typeof pid == 'undefined') {
+        if (typeof pid == 'undefined') {
           return dimensions;
         }
         var url = this.getDimensionsUri(pid);
