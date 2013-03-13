@@ -33,10 +33,9 @@ function islandora_internet_archive_bookreader_admin_settings_form(array $form, 
       '#access' => $solr_enabled,
       '#type' => 'textfield',
       '#title' => t('Solr field that has the relationship to the book object pid'),
-      '#description' => t('When we search within a book we need to know the pid of the book. This would be the solr field that contains the book pid for each page object.'),
+      '#description' => t('When we search within a book we need to know the pid of the book. This would be the solr field that contains the book pid for each page object. The solr field is expected to contain the <b>"info:fedora/"</b> prefix.'),
       '#default_value' => $get_default_value('islandora_internet_archive_bookreader_ocr_filter_field', 'rels.isMemberOf'),
     ),
   );
   return system_settings_form($form);
 }
-
