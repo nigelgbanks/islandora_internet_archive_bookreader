@@ -49,6 +49,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
         'pageProgression' => $variables['page_progression'],
         'pages' => $pages,
         'pageCount' => count($pages),
+        'overlayOpacity' => variable_get('islandora_internet_archive_bookreader_overlay_opacity', '0.5'),
       ),
     ), 'setting');
   drupal_add_css("$library_path/BookReader/BookReader.css", array(
