@@ -490,19 +490,19 @@ function IslandoraBookReader(settings) {
     jToolbar.find('.share').colorbox({inline: true, opacity: overlayOpacity, href: "#BRshare", onLoad: function() {
       self.autoStop(); self.ttsStop();
       $('#colorbox').draggable({
-        cancel: '.BRfloatMeta'
+        cancel: '.BRfloat > :not(.BRfloatHead)'
       });
     }});
     jToolbar.find('.info').colorbox({inline: true, opacity: overlayOpacity, href: "#BRinfo", onLoad: function() {
       self.autoStop(); self.ttsStop();
       $('#colorbox').draggable({
-        cancel: '.BRfloatMeta'
+        cancel: '.BRfloat > :not(.BRfloatHead)'
       });
     }});
     jToolbar.find('.full_text').colorbox({inline: true, opacity: overlayOpacity, href: "#BRfulltext", onLoad: function() {
       self.autoStop(); self.ttsStop();
       $('#colorbox').draggable({
-        cancel: '.BRfloatMeta'
+        cancel: '.BRfloat > :not(.BRfloatHead)'
       });
       self.buildFullTextDiv($('#BRfulltext'));
     }});
