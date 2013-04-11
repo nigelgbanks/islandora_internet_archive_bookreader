@@ -490,13 +490,13 @@ function IslandoraBookReader(settings) {
     jToolbar.find('.share').colorbox({inline: true, opacity: overlayOpacity, href: "#BRshare", onLoad: function() {
       self.autoStop(); self.ttsStop();
       $('#colorbox').draggable({
-        cancel: '.BRfloatMeta'
+        cancel: '.BRnoDragWrapper'
       });
     }});
     jToolbar.find('.info').colorbox({inline: true, opacity: overlayOpacity, href: "#BRinfo", onLoad: function() {
       self.autoStop(); self.ttsStop();
       $('#colorbox').draggable({
-        cancel: '.BRfloatMeta'
+        cancel: '.BRnoDragWrapper'
       });
     }});
     jToolbar.find('.full_text').colorbox({inline: true, opacity: overlayOpacity, href: "#BRfulltext", onLoad: function() {
@@ -521,6 +521,7 @@ function IslandoraBookReader(settings) {
             '<div class="BRfloatHead">' + Drupal.t('About this book'),
                 '<a class="floatShut" href="javascript:;" onclick="jQuery.fn.colorbox.close();"><span class="shift">' + Drupal.t('Close') + '</span></a>',
             '</div>',
+            '<div class="BRnoDragWrapper"></div>',
       '</div>'].join('\n'));
   }
 
@@ -550,6 +551,7 @@ function IslandoraBookReader(settings) {
                 'Share',
                 '<a class="floatShut" href="javascript:;" onclick="jQuery.fn.colorbox.close();"><span class="shift">' + Drupal.t('Close') + '</span></a>',
             '</div>',
+            '<div class="BRnoDragWrapper"></div>',
       '</div>'].join('\n'));
   }
 
@@ -557,7 +559,7 @@ function IslandoraBookReader(settings) {
    * Appends content onto the "Info" module dialog box.
    */
   IslandoraBookReader.prototype.buildInfoDiv = function(jInfoDiv) {
-    $(this.settings.info).appendTo(jInfoDiv);
+    jInfoDiv.find('.BRnoDragWrapper').first().append(this.settings.info);
   }
 
   /**
@@ -583,7 +585,6 @@ function IslandoraBookReader(settings) {
             '</fieldset>',
         '</form>'].join('\n'));
 
-    jForm.appendTo(jShareDiv);
 
     jForm.find('input').bind('change', function() {
         var form = $(this).parents('form:first');
@@ -602,8 +603,8 @@ function IslandoraBookReader(settings) {
     jForm.find('input, textarea').bind('focus', function() {
       this.select();
     });
-    jForm.appendTo(jShareDiv);
-    jForm = ''; // closure
+
+    jShareDiv.find('.BRnoDragWrapper').first().append(jForm);
   }
 
   /**
