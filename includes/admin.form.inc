@@ -36,6 +36,17 @@ function islandora_internet_archive_bookreader_admin_settings_form(array $form, 
       '#description' => t('When we search within a book we need to know the pid of the book. This would be the solr field that contains the book pid for each page object.'),
       '#default_value' => $get_default_value('islandora_internet_archive_bookreader_ocr_filter_field', 'rels.isMemberOf'),
     ),
+    'islandora_internet_archive_bookreader_default_page_view' => array(
+      '#type' => 'select',
+      '#title' => t('Default page view'),
+      '#description' => t('The number of pages to display by default'),
+      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_default_page_view', '1up'),
+      '#options' => array(
+        1 => 'Single page',
+        2 => 'Side by side',
+        3 => 'Thumbnails',
+      ),
+    ),
   );
   return system_settings_form($form);
 }
