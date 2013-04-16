@@ -486,16 +486,28 @@ function IslandoraBookReader(settings) {
       jToolbar.find('.one_page_mode').hide();
     }
 
+    var overlayOpacity = Drupal.settings.islandoraInternetArchiveBookReader.overlayOpacity;
     // $$$ Don't hardcode ids
     var self = this;
-    jToolbar.find('.share').colorbox({inline: true, opacity: "0.5", href: "#BRshare", onLoad: function() { self.autoStop(); self.ttsStop(); } });
-    jToolbar.find('.info').colorbox({inline: true, opacity: "0.5", href: "#BRinfo", onLoad: function() { self.autoStop(); self.ttsStop(); } });
-    jToolbar.find('.full_text').colorbox({inline: true, opacity: "0.5", href: "#BRfulltext",
-      onLoad: function() {
-        self.autoStop(); self.ttsStop();
-        self.buildFullTextDiv($('#BRfulltext'));
-      }
-    });
+    jToolbar.find('.share').colorbox({inline: true, opacity: overlayOpacity, href: "#BRshare", onLoad: function() {
+      self.autoStop(); self.ttsStop();
+      $('#colorbox').draggable({
+        cancel: '.BRfloat > :not(.BRfloatHead)'
+      });
+    }});
+    jToolbar.find('.info').colorbox({inline: true, opacity: overlayOpacity, href: "#BRinfo", onLoad: function() {
+      self.autoStop(); self.ttsStop();
+      $('#colorbox').draggable({
+        cancel: '.BRfloat > :not(.BRfloatHead)'
+      });
+    }});
+    jToolbar.find('.full_text').colorbox({inline: true, opacity: overlayOpacity, href: "#BRfulltext", onLoad: function() {
+      self.autoStop(); self.ttsStop();
+      $('#colorbox').draggable({
+        cancel: '.BRfloat > :not(.BRfloatHead)'
+      });
+      self.buildFullTextDiv($('#BRfulltext'));
+    }});
     $('<div style="display: none;"></div>').append(this.blankShareDiv()).append(this.blankInfoDiv()).append(this.blankFullTextDiv()).appendTo($('body'));
     $('#BRinfo .BRfloatTitle a').attr( {'href': this.bookUrl} ).text(this.bookTitle).addClass('title');
     this.buildInfoDiv($('#BRinfo'));
