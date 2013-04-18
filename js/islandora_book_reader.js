@@ -7,6 +7,7 @@
  * Constructor
  */
 function IslandoraBookReader(settings) {
+  BookReader.call(this);
   this.settings = settings;
   this.dimensions = {};
   this.numLeafs = settings.pageCount;
@@ -15,8 +16,6 @@ function IslandoraBookReader(settings) {
   this.imagesBaseURL = settings.imagesFolderUri;
   this.logoURL = '';
   this.mode = settings.mode
-
-  BookReader.call(this);
 }
 
 (function ($) {
