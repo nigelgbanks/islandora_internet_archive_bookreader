@@ -40,7 +40,7 @@ div#BRnav {
   margin-top: -40px;
 }
 div#BRfulltext .BRfloatMeta {
-  overflow: scroll;
+  overflow: auto;
 }
 div.BRpagediv1up {
  overflow: visible;
@@ -92,4 +92,16 @@ div.BRprogresspopup {
 .textLeft {
   float: left;
   width: 50%;
+}
+
+#cboxWrapper {
+  background: none;
+}
+
+#cboxMiddleLeft {
+  height: 0 !important;
+}
+
+#cboxContent {
+  height: 643px !important;
 }
