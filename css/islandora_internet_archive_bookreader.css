@@ -94,14 +94,19 @@ div.BRprogresspopup {
   width: 50%;
 }
 
+/*
+ * Colorbox (used for displaying textarea with page OCR)
+ * 
+ */
+
 #cboxWrapper {
-  background: none;
+  background: none; /* Used to eliminate white background */
 }
 
 #cboxMiddleLeft {
-  height: 0 !important;
+  height: 0 !important; /* Positions textarea correctly */
 }
 
 #cboxContent {
-  height: 643px !important;
+  height: 643px !important; /* Set height of textarea to display correctly */
 }
