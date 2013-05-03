@@ -20,4 +20,4 @@ script:
   - $ISLANDORA_DIR/tests/scripts/line_endings.sh sites/all/modules/islandora_internet_archive_bookreader
   - drush coder-review --reviews=production,security,style,i18n,potx,sniffer islandora_internet_archive_bookreader
   - phpcpd --names *.module,*.inc,*.test sites/all/modules/islandora_internet_archive_bookreader
-  - drush test-ru --uri=http://localhost:8081 "Islandora Internet Archive Bookreader"
+  - drush test-run --uri=http://localhost:8081 "Islandora Internet Archive Bookreader"
