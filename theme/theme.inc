@@ -114,14 +114,8 @@ function theme_islandora_internet_archive_bookreader_book_info(array $variables)
  *   The object to fetch the information from.
  *
  * @return array
- *   Any array of fields where the key is the label and the second the
+ *   Any associative array where the key is the label and the second the
  *   fields value(s).
- *
- * @code
- *   array(
- *     'label' => array('value', 'value')
- *   )
- * @endcode
  */
 function islandora_internet_archive_bookreader_info_fields(FedoraObject $object) {
   if (!isset($object['MODS'])) {
