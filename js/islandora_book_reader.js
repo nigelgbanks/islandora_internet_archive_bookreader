@@ -616,20 +616,24 @@ function IslandoraBookReader(settings) {
     jFullTextDiv.find('.BRfloatMeta').height(600);
     jFullTextDiv.find('.BRfloatMeta').width(600);
     if (1 == this.mode) {
-      var index;// = this.currentIndex();
-      var page_string = $('#pagenum').children('.currentpage').html();
-      var p_arr = page_string.split(" ");
-      var p_index = p_arr[1]
-      index = p_index - 1;
-      
+    	console.log(this.currentIndex());
+      var index = this.currentIndex();
+//      var page_string = $('#pagenum').children('.currentpage').html();
+//      var p_arr = page_string.split(" ");
+//      var p_index = p_arr[1]
+//      index = p_index - 1;
       var pid = this.getPID(index);
+      console.log(pid);
       $.get(this.getTextURI(pid),
             function(data) {
+    	      console.log(JSON.stringify(data));
               jFullTextDiv.find('.BRfloatMeta').html(data);
             });
     } else if (3 == this.mode) {
+    	console.log("mode 3");
       jFullTextDiv.find('.BRfloatMeta').html('<div>' + Drupal.t('Full text not supported for this view.') + '</div>');
     } else {
+      console.log("in else");
       var twoPageText = $([
       '<div class="textTop">',
          '<div class="textLeft"></div>',
