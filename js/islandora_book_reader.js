@@ -447,7 +447,7 @@ function IslandoraBookReader(settings) {
       that.search($('#textSrch').val());
       return false;
     });
-
+    this.get
     // Browser hack - bug with colorbox on iOS 3 see https://bugs.launchpad.net/bookreader/+bug/686220
     if ( navigator.userAgent.match(/ipad/i) && $.browser.webkit && (parseInt($.browser.version, 10) <= 531) ) {
       $('#BRtoolbarbuttons .info').hide();
@@ -616,13 +616,16 @@ function IslandoraBookReader(settings) {
     jFullTextDiv.find('.BRfloatMeta').height(600);
     jFullTextDiv.find('.BRfloatMeta').width(600);
     if (1 == this.mode) {
-    	console.log(this.currentIndex());
       var index = this.currentIndex();
-//      var page_string = $('#pagenum').children('.currentpage').html();
-//      var p_arr = page_string.split(" ");
-//      var p_index = p_arr[1]
-//      index = p_index - 1;
+      var page_string = $('#pagenum').children('.currentpage').html();
+      console.log("Page String: " + page_string);
+      var p_arr = page_string.split(" ");
+      var p_index = p_arr[1]
+      index = p_index - 1;
+      console.log(index);
+      
       var pid = this.getPID(index);
+      
       console.log(pid);
       $.get(this.getTextURI(pid),
             function(data) {
@@ -630,10 +633,8 @@ function IslandoraBookReader(settings) {
               jFullTextDiv.find('.BRfloatMeta').html(data);
             });
     } else if (3 == this.mode) {
-    	console.log("mode 3");
       jFullTextDiv.find('.BRfloatMeta').html('<div>' + Drupal.t('Full text not supported for this view.') + '</div>');
     } else {
-      console.log("in else");
       var twoPageText = $([
       '<div class="textTop">',
          '<div class="textLeft"></div>',
@@ -688,6 +689,7 @@ function IslandoraBookReader(settings) {
     var p_arr = page_string.split(" ");
     var p_index = p_arr[1]
     index = p_index;
+    
     var newHash = '#' + this.fragmentFromParams(this.paramsFromCurrent());
     if (page_string != this.currentIndex()) {
       var param_data = this.fragmentFromParams(this.paramsFromCurrent()).split("/");
