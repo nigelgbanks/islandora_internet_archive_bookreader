@@ -618,18 +618,14 @@ function IslandoraBookReader(settings) {
     if (1 == this.mode) {
       var index = this.currentIndex();
       var page_string = $('#pagenum').children('.currentpage').html();
-      console.log("Page String: " + page_string);
       var p_arr = page_string.split(" ");
       var p_index = p_arr[1]
       index = p_index - 1;
-      console.log(index);
       
       var pid = this.getPID(index);
       
-      console.log(pid);
       $.get(this.getTextURI(pid),
             function(data) {
-    	      console.log(JSON.stringify(data));
               jFullTextDiv.find('.BRfloatMeta').html(data);
             });
     } else if (3 == this.mode) {
