@@ -616,14 +616,11 @@ function IslandoraBookReader(settings) {
     jFullTextDiv.find('.BRfloatMeta').height(600);
     jFullTextDiv.find('.BRfloatMeta').width(600);
     if (1 == this.mode) {
-      var index = this.currentIndex();
-      var page_string = $('#pagenum').children('.currentpage').html();
-      var p_arr = page_string.split(" ");
-      var p_index = p_arr[1]
-      index = p_index - 1;
-      
-      var pid = this.getPID(index);
-      
+      this.currentIndex();
+      // Recent fix to correct issue with 2 page books
+      var hash_arr = this.oldLocationHash.split("/");
+      var index = hash_arr[1];
+      var pid = this.getPID(index-1);
       $.get(this.getTextURI(pid),
             function(data) {
               jFullTextDiv.find('.BRfloatMeta').html(data);
