@@ -12,7 +12,6 @@
  * islandora_paged_content provides.
  */
 function islandora_internet_archive_bookreader_remap_highlighting_for_bookreader_results($original_results) {
-  dsm($original_results);
   $results = array(
     'matches' => array(),
   );

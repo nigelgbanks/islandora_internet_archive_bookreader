@@ -54,7 +54,6 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
       ),
     );
   drupal_add_js($data_array, 'setting');
-  dsm($data_array);
   drupal_add_css("$library_path/BookReader/BookReader.css", array(
     'group' => CSS_SYSTEM,
   ));
