@@ -447,7 +447,6 @@ function IslandoraBookReader(settings) {
       that.search($('#textSrch').val());
       return false;
     });
-    this.get
     // Browser hack - bug with colorbox on iOS 3 see https://bugs.launchpad.net/bookreader/+bug/686220
     if ( navigator.userAgent.match(/ipad/i) && $.browser.webkit && (parseInt($.browser.version, 10) <= 531) ) {
       $('#BRtoolbarbuttons .info').hide();
@@ -616,7 +615,6 @@ function IslandoraBookReader(settings) {
     jFullTextDiv.find('.BRfloatMeta').height(600);
     jFullTextDiv.find('.BRfloatMeta').width(600);
     if (1 == this.mode) {
-      this.currentIndex();
       // Recent fix to correct issue with 2 page books
       var hash_arr = this.oldLocationHash.split("/");
       var index = hash_arr[1];
