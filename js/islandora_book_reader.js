@@ -715,7 +715,7 @@ function IslandoraBookReader(settings) {
     // prevents the last page from displaying the correct transcriptions
     // or hash links.
     var page_string = $('#pagenum').children('.currentpage').html();
-    if(page_string !== null) {
+    if (page_string !== null) {
       var p_arr = page_string.split(" ");
       var p_index = p_arr[1]
       index = p_index;
