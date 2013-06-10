@@ -35,7 +35,8 @@ function islandora_internet_archive_bookreader_dimensions_callback(AbstractObjec
  *   The page object whose OCR data-stream will be used for display.
  */
 function islandora_internet_archive_bookreader_text_callback(AbstractObject $object) {
-  echo (isset($object['OCR']) && islandora_datastream_access(FEDORA_VIEW_OBJECTS, $object['OCR'])) ?
+  $accessible_ocr = isset($object['OCR']) && islandora_datastream_access(FEDORA_VIEW_OBJECTS, $object['OCR']);
+  echo $accessible_ocr ?
     htmlspecialchars($object['OCR']->content) :
     t('Text not available!');
   drupal_exit();
