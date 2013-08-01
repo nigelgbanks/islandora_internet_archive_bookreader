@@ -6,7 +6,7 @@ Current build status:
 CI Server:
 http://jenkins.discoverygarden.ca
 
-ISLANDORA IMPORTER
+ISLANDORA INTERNET ARCHIVE BOOKREADER
 ==================
 
 CONTENTS OF THIS FILE
