@@ -521,10 +521,8 @@ function IslandoraBookReader(settings) {
    * Toggle fullscreen viewer.
    */
   IslandoraBookReader.prototype.toggleFullScreen = function() {
-    console.log('fullscreenbrah');
     this.fullscreen = (this.fullscreen ? false : true);
     if(this.fullscreen) {
-      console.log('yes full screen me');
       $('div#book-viewer').css({
         'position': 'fixed',
         'width': '100%',
