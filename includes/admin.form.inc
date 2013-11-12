@@ -54,6 +54,11 @@ function islandora_internet_archive_bookreader_admin_settings_form(array $form, 
         3 => 'Thumbnails',
       ),
     ),
+    'islandora_internet_archive_bookreader_mobile_full_screen' => array(
+      '#type' => 'checkbox',
+      '#title' => t('Force the Internet Archive Bookreader into full screen for mobile users?'),
+      '#default_value' => variable_get('islandora_internet_archive_bookreader_mobile_full_screen', FALSE),
+    ),
   );
   return system_settings_form($form);
 }

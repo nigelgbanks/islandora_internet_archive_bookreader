@@ -553,6 +553,27 @@ function IslandoraBookReader(settings) {
   }
 
   /**
+   * Go Fullscreen regardless of current state.
+   */
+   IslandoraBookReader.prototype.goFullScreen = function() {
+    this.fullscreen = true;
+        $('div#book-viewer').css({
+            'position': 'fixed',
+            'width': '100%',
+            'height': '100%',
+            'left': '0',
+            'top': '0',
+            'z-index': '700'
+        });
+        $('div#BookReader, div#BRcontainer').css({
+            'height': '100%'
+        });
+        //this little hack re-centers the pages
+        this.zoom(1);
+        this.zoom(2);
+
+  }
+  /**
    * The default look of the "Info" modal dialog box.
    */
   IslandoraBookReader.prototype.blankInfoDiv = function() {

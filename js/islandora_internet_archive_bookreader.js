@@ -16,6 +16,10 @@
           $('#textSrch').hide();
           $('#btnSrch').hide();
         }
+
+        if ($.browser.mobile && settings.islandoraInternetArchiveBookReader.mobilize) {
+          bookReader.goFullScreen();
+        }
       });
     }
   };

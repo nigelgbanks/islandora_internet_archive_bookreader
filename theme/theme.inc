@@ -51,9 +51,11 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
       'pageCount' => count($pages),
       'overlayOpacity' => variable_get('islandora_internet_archive_bookreader_overlay_opacity', '0.5'),
       'mode' => (int) variable_get('islandora_internet_archive_bookreader_default_page_view', 1),
+      'mobilize' => variable_get('islandora_internet_archive_bookreader_mobile_full_screen', FALSE),
     ),
   );
   drupal_add_js($data_array, 'setting');
+  drupal_add_js("$module_path/js/detectmobilebrowser.js");
   drupal_add_css("$library_path/BookReader/BookReader.css", array(
     'group' => CSS_SYSTEM,
   ));
@@ -69,11 +71,6 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   // Use a newer version of color box as the version bundled with BookReader
   // won't work with JQuery 1.4.4
   drupal_add_js("$module_path/js/jquery.colorbox-min.js", array(
-    'group' => JS_LIBRARY,
-  ));
-  // Needed to modify jquery.ui.ipad.js plugin to work with drupal
-  // as '$' is not defined globally in D7.
-  drupal_add_js("$module_path/js/jquery.ui.ipad.js", array(
     'group' => JS_LIBRARY,
   ));
   drupal_add_js("$library_path/BookReader/jquery.bt.min.js", array(
