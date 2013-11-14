@@ -33,8 +33,31 @@ function islandora_internet_archive_bookreader_admin_settings_form(array $form, 
       '#access' => $solr_enabled,
       '#type' => 'textfield',
       '#title' => t('Solr field relating pages to book PIDs'),
-      '#description' => t('BookReader needs to know the PID of any book it\'s searching in, because OCR datastreams are stored in individual pages and </br>not in the book as a whole. This should therefore be set to the page-object-based Solr field that relates it to its parent book\'s PID.'),
-      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_ocr_filter_field', 'rels.isMemberOf'),
+      '#description' => t("BookReader needs to know the PID of any book it's searching in, because OCR datastreams are stored in individual pages and </br>not in the book as a whole. This should therefore be set to the page-object-based Solr field that relates it to its parent book's PID."),
+      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_ocr_filter_field', 'RELS_EXT_isMemberOf_uri_ms'),
+    ),
+    'islandora_internet_archive_bookreader_overlay_opacity' => array(
+      '#type' => 'textfield',
+      '#title' => t('Overlay Opacity'),
+      '#description' => t('The opacity of the overlay, when opening the info, fulltext and share dialogs (A number between 0 (fully transparent) and 1 (fully opaque)).'),
+      '#element_validate' => array('element_validate_number'),
+      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_overlay_opacity', '0.5'),
+    ),
+    'islandora_internet_archive_bookreader_default_page_view' => array(
+      '#type' => 'select',
+      '#title' => t('Default page view'),
+      '#description' => t('The number of pages to display by default'),
+      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_default_page_view', 1),
+      '#options' => array(
+        1 => 'Single page',
+        2 => 'Side by side',
+        3 => 'Thumbnails',
+      ),
+    ),
+    'islandora_internet_archive_bookreader_mobile_full_screen' => array(
+      '#type' => 'checkbox',
+      '#title' => t('Force the Internet Archive Bookreader into full screen for mobile users?'),
+      '#default_value' => variable_get('islandora_internet_archive_bookreader_mobile_full_screen', FALSE),
     ),
   );
   return system_settings_form($form);

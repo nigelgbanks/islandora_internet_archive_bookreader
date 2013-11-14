@@ -15,6 +15,8 @@ function IslandoraBookReader(settings) {
   this.bookUrl = document.location.toString();
   this.imagesBaseURL = settings.imagesFolderUri;
   this.logoURL = '';
+  this.mode = settings.mode
+  this.fullscreen = false;
 }
 
 (function ($) {
@@ -32,6 +34,7 @@ function IslandoraBookReader(settings) {
    *   The index of the page.
    */
   IslandoraBookReader.prototype.getPageNum = function(index) {
+
     return index + 1;
   }
 
@@ -45,7 +48,7 @@ function IslandoraBookReader(settings) {
    *   The index of the given leaf number.
    */
   IslandoraBookReader.prototype.leafNumToIndex = function(leafNum) {
-    return leafNum-1;
+    return leafNum - 1;
   }
 
   /**
@@ -88,7 +91,6 @@ function IslandoraBookReader(settings) {
   IslandoraBookReader.prototype.getPageDimensions = function(index) {
     var dimensions = { width: 0, height: 0 };
     var page = this.getPage(index);
-
     if (typeof page != 'undefined') {
       // If we don't have one or the other, make a query out to Djatoka.
       if (typeof page.width == 'undefined' || typeof page.height == 'undefined') {
@@ -429,8 +431,7 @@ function IslandoraBookReader(settings) {
         +     "<button class='BRicon pause'></button>"
         +     "<button class='BRicon info'></button>"
         +     "<button class='BRicon full_text'></buttion>"
-        // @todo Fix full screen mode.
-        //+     "<button class='BRicon full'></button>"
+        +     "<button class='BRicon full'></button>"
         +     "<button class='BRicon share'></button>"
         +     readIcon
         +   "</span>"
@@ -446,7 +447,6 @@ function IslandoraBookReader(settings) {
       that.search($('#textSrch').val());
       return false;
     });
-
     // Browser hack - bug with colorbox on iOS 3 see https://bugs.launchpad.net/bookreader/+bug/686220
     if ( navigator.userAgent.match(/ipad/i) && $.browser.webkit && (parseInt($.browser.version, 10) <= 531) ) {
       $('#BRtoolbarbuttons .info').hide();
@@ -484,22 +484,95 @@ function IslandoraBookReader(settings) {
       jToolbar.find('.one_page_mode').hide();
     }
 
+    var overlayOpacity = Drupal.settings.islandoraInternetArchiveBookReader.overlayOpacity;
     // $$$ Don't hardcode ids
     var self = this;
-    jToolbar.find('.share').colorbox({inline: true, opacity: "0.5", href: "#BRshare", onLoad: function() { self.autoStop(); self.ttsStop(); } });
-    jToolbar.find('.info').colorbox({inline: true, opacity: "0.5", href: "#BRinfo", onLoad: function() { self.autoStop(); self.ttsStop(); } });
-    jToolbar.find('.full_text').colorbox({inline: true, opacity: "0.5", href: "#BRfulltext",
-      onLoad: function() {
-        self.autoStop(); self.ttsStop();
-        self.buildFullTextDiv($('#BRfulltext'));
-      }
+    jToolbar.find('.share').colorbox({inline: true, opacity: overlayOpacity, href: "#BRshare", onLoad: function() {
+      self.autoStop(); self.ttsStop();
+      $('#colorbox').draggable({
+        cancel: '.BRfloat > :not(.BRfloatHead)'
+      });
+    }});
+    jToolbar.find('.info').colorbox({inline: true, opacity: overlayOpacity, href: "#BRinfo", onLoad: function() {
+      self.autoStop(); self.ttsStop();
+      $('#colorbox').draggable({
+        cancel: '.BRfloat > :not(.BRfloatHead)'
+      });
+    }});
+    jToolbar.find('.full_text').colorbox({inline: true, opacity: overlayOpacity, href: "#BRfulltext", onLoad: function() {
+      self.autoStop(); self.ttsStop();
+      $('#colorbox').draggable({
+        cancel: '.BRfloat > :not(.BRfloatHead)'
+      });
+      self.buildFullTextDiv($('#BRfulltext'));
+    }});
+
+    jToolbar.find('.full').bind('click', function() {
+      self.toggleFullScreen();
     });
+
     $('<div style="display: none;"></div>').append(this.blankShareDiv()).append(this.blankInfoDiv()).append(this.blankFullTextDiv()).appendTo($('body'));
     $('#BRinfo .BRfloatTitle a').attr( {'href': this.bookUrl} ).text(this.bookTitle).addClass('title');
     this.buildInfoDiv($('#BRinfo'));
     this.buildShareDiv($('#BRshare'));
   }
 
+  /**
+   * Toggle fullscreen viewer.
+   */
+  IslandoraBookReader.prototype.toggleFullScreen = function() {
+    this.fullscreen = (this.fullscreen ? false : true);
+    if(this.fullscreen) {
+      $('div#book-viewer').css({
+        'position': 'fixed',
+        'width': '100%',
+        'height': '100%',
+        'left': '0',
+        'top': '0',
+        'z-index': '700'
+      });
+      $('div#BookReader, div#BRcontainer').css({
+        'height': '100%'
+      });
+      //this little hack re-centers the pages
+      this.zoom(1);
+      this.zoom(2);
+
+    }
+    else {
+      $('div#book-viewer').css({
+      'position': 'relative',
+      'z-index': '0'
+      });
+      $('div#BookReader, div#BRcontainer').css({
+        'height': '680px'
+      });
+      this.zoom(1);
+      this.zoom(2);
+    }
+  }
+
+  /**
+   * Go Fullscreen regardless of current state.
+   */
+   IslandoraBookReader.prototype.goFullScreen = function() {
+    this.fullscreen = true;
+        $('div#book-viewer').css({
+            'position': 'fixed',
+            'width': '100%',
+            'height': '100%',
+            'left': '0',
+            'top': '0',
+            'z-index': '700'
+        });
+        $('div#BookReader, div#BRcontainer').css({
+            'height': '100%'
+        });
+        //this little hack re-centers the pages
+        this.zoom(1);
+        this.zoom(2);
+
+  }
   /**
    * The default look of the "Info" modal dialog box.
    */
@@ -601,8 +674,10 @@ function IslandoraBookReader(settings) {
     jFullTextDiv.find('.BRfloatMeta').height(600);
     jFullTextDiv.find('.BRfloatMeta').width(600);
     if (1 == this.mode) {
-      var index = this.currentIndex();
-      var pid = this.getPID(index);
+      // Recent fix to correct issue with 2 page books
+      var hash_arr = this.oldLocationHash.split("/");
+      var index = hash_arr[1];
+      var pid = this.getPID(index-1);
       $.get(this.getTextURI(pid),
             function(data) {
               jFullTextDiv.find('.BRfloatMeta').html(data);
@@ -657,13 +732,36 @@ function IslandoraBookReader(settings) {
    * browsers can't handle that shit.
    */
   IslandoraBookReader.prototype.updateLocationHash = function() {
+    // Updated with fix to recent bug found in the Archive Viewer that
+    // prevents the last page from displaying the correct transcriptions
+    // or hash links.
+    var page_string = $('#pagenum').children('.currentpage').html();
+    if (page_string != null) {
+      var p_arr = page_string.split(" ");
+      var p_index = p_arr[1]
+      index = p_index;
+    }
+    else {
+      index = 1;
+    }
+
     var newHash = '#' + this.fragmentFromParams(this.paramsFromCurrent());
+    if (page_string != this.currentIndex()) {
+      var param_data = this.fragmentFromParams(this.paramsFromCurrent()).split("/");
+      param_data[1] = index;
+      newHash = '#' + replaceAll(',','/',param_data.toString());
+    }
+    // End bug fix.
     if (this.oldLocationHash != newHash) {
       window.location.hash = newHash;
     }
     // This is the variable checked in the timer.  Only user-generated changes
     // to the URL will trigger the event.
     this.oldLocationHash = newHash;
+  }
+
+  function replaceAll(find, replace, str) {
+    return str.replace(new RegExp(find, 'g'), replace);
   }
 
   /**
