@@ -100,8 +100,8 @@ function theme_islandora_internet_archive_bookreader_book_info(array $variables)
   else {
     $fields = islandora_internet_archive_bookreader_info_fields($object);
     $convert_to_string = function($o) {
-          return implode('<br/>', $o);
-        };
+      return implode('<br/>', $o);
+    };
     $fields = array_map($convert_to_string, $fields);
     $rows = array_map(NULL, array_keys($fields), array_values($fields));
     $content = theme('table', array(
