@@ -99,7 +99,8 @@ function theme_islandora_internet_archive_bookreader_book_info(array $variables)
     // IAV is weird and doesn't like to include Drupal's JS for collapsing so
     // let's remove it if there's a fieldset.
     if (strpos($metadata, 'fieldset') !== FALSE) {
-      $metadata = preg_replace('/collapsible collapsed/', '', $metadata);
+      $metadata = preg_replace('/collapsible/', '', $metadata);
+      $metadata = preg_replace('/collapsed/', '', $metadata);
     }
     $content = $metadata;
   }
