@@ -83,25 +83,42 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   drupal_add_js("$module_path/js/islandora_internet_archive_bookreader.js");
 }
 
+
 /**
  * Implements theme_hook().
  */
 function theme_islandora_internet_archive_bookreader_book_info(array $variables) {
+  module_load_include('inc', 'islandora', 'includes/metadata');
+
   $object = $variables['object'];
-  $fields = islandora_internet_archive_bookreader_info_fields($object);
-  $convert_to_string = function($o) {
-    return implode('<br/>', $o);
-  };
-  $fields = array_map($convert_to_string, $fields);
-  $rows = array_map(NULL, array_keys($fields), array_values($fields));
-  $content = theme('table', array(
-               'caption' => '',
-               'empty' => t('No Information specified.'),
-               'attributes' => array(),
-               'colgroups' => array(),
-               'header' => array(t('Field'), t('Values')),
-               'rows' => $rows,
-               'sticky' => FALSE));
+
+  $metadata = islandora_retrieve_metadata_markup($object);
+  $viewer = variable_get('islandora_metadata_display', 'dublin_core');
+  // Let's default back to what IAV had before for a default.
+  if ($viewer != 'dublin_core' && $metadata) {
+    // IAV is weird and doesn't like to include Drupal's JS for collapsing so
+    // let's remove it if there's a fieldset.
+    if (strpos($metadata, 'fieldset') !== FALSE) {
+      $metadata = str_replace(array('collapsible', 'collapsed'), '', $metadata);
+    }
+    $content = $metadata;
+  }
+  else {
+    $fields = islandora_internet_archive_bookreader_info_fields($object);
+    $convert_to_string = function($o) {
+      return implode('<br/>', $o);
+    };
+    $fields = array_map($convert_to_string, $fields);
+    $rows = array_map(NULL, array_keys($fields), array_values($fields));
+    $content = theme('table', array(
+      'caption' => '',
+      'empty' => t('No Information specified.'),
+      'attributes' => array(),
+      'colgroups' => array(),
+      'header' => array(t('Field'), t('Values')),
+      'rows' => $rows,
+      'sticky' => FALSE));
+  }
   return $content;
 }
 
