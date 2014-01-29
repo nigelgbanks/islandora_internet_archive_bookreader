@@ -92,15 +92,12 @@ function theme_islandora_internet_archive_bookreader_book_info(array $variables)
 
   $object = $variables['object'];
 
-  $metadata = islandora_retrieve_metadata_markup($object);
+  // As IAV presents the metadata within a Colorbox window request for the
+  // metadata in printable form.
+  $metadata = islandora_retrieve_metadata_markup($object, TRUE);
   $viewer = variable_get('islandora_metadata_display', 'dublin_core');
   // Let's default back to what IAV had before for a default.
   if ($viewer != 'dublin_core' && $metadata) {
-    // IAV is weird and doesn't like to include Drupal's JS for collapsing so
-    // let's remove it if there's a fieldset.
-    if (strpos($metadata, 'fieldset') !== FALSE) {
-      $metadata = str_replace(array('collapsible', 'collapsed'), '', $metadata);
-    }
     $content = $metadata;
   }
   else {
