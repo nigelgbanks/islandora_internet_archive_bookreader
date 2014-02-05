@@ -49,27 +49,28 @@ function islandora_internet_archive_bookreader_menu() {
 /**
  * Alter jQuery version for IAViewer.
  *
- * @param unknown $javascript
+ * @param array $javascript
+ *   Drupal javascript parameters.
  */
 function islandora_internet_archive_bookreader_js_alter(&$javascript) {
   $pid = explode("/", $_GET['q']);
-  if(isset($pid[2])) {
+  if (isset($pid[2])) {
     $object = islandora_object_load($pid[2]);
-    if($object && in_array('islandora:bookCModel', $object->models)) {
+    if ($object && in_array('islandora:bookCModel', $object->models)) {
       $jquery_location = drupal_get_path('module', 'islandora_internet_archive_bookreader') .
       '/js/jquery.min.js';
-      if(isset($javascript['misc/jquery.js'])) {
+      if (isset($javascript['misc/jquery.js'])) {
         // Override, set jquery to use 1.5, as it is the latest
         // supported version for the IAViewer.
         $javascript['misc/jquery.js']['data'] = $jquery_location;
       }
       // Check if jquery_update module has been implemented.
-      if(module_exists('jquery_update')) {
+      if (module_exists('jquery_update')) {
         $jquery_versions = array("1.10", "1.5", "1.7", "1.8", "1.9");
         foreach ($jquery_versions as $key) {
           $index = "sites/all/modules/jquery_update/replace/jquery/$key/jquery.min.js";
           // Revert any versions of jQuery it may have enabled.
-          if(isset($javascript[$index])) {
+          if (isset($javascript[$index])) {
             // Swap out jQuery to use an older version (1.5) of the library.
             $javascript[$index]['data'] = $jquery_location;
           }
