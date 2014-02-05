@@ -55,7 +55,7 @@ function islandora_internet_archive_bookreader_js_alter(&$javascript) {
   $pid = explode("/", $_GET['q']);
   if(isset($pid[2])) {
     $object = islandora_object_load($pid[2]);
-    if(isset($object) && in_array('islandora:bookCModel', $object->models)) {
+    if($object && in_array('islandora:bookCModel', $object->models)) {
       $jquery_location = drupal_get_path('module', 'islandora_internet_archive_bookreader') .
       '/js/jquery.min.js';
       if(isset($javascript['misc/jquery.js'])) {
