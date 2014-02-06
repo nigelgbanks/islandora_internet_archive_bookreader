@@ -3,23 +3,24 @@
  * IslandoraBookReader is derived from the Internet Archive BookReader class.
  */
 
-/**
- * Constructor
- */
-function IslandoraBookReader(settings) {
-  BookReader.call(this);
-  this.settings = settings;
-  this.dimensions = {};
-  this.numLeafs = settings.pageCount;
-  this.bookTitle = settings.label.substring(0,97) + '...';
-  this.bookUrl = document.location.toString();
-  this.imagesBaseURL = settings.imagesFolderUri;
-  this.logoURL = '';
-  this.mode = settings.mode
-  this.fullscreen = false;
-}
-
 (function ($) {
+
+  /**
+   * Constructor
+   */
+  IslandoraBookReader = function(settings) {
+    BookReader.call(this);
+    this.settings = settings;
+    this.dimensions = {};
+    this.numLeafs = settings.pageCount;
+    this.bookTitle = settings.label.substring(0,97) + '...';
+    this.bookUrl = document.location.toString();
+    this.imagesBaseURL = settings.imagesFolderUri;
+    this.logoURL = '';
+    this.mode = settings.mode
+    this.fullscreen = false;
+  }
+
   // Inherit from Internet Archive BookReader class.
   jQuery.extend(IslandoraBookReader.prototype, BookReader.prototype);
 

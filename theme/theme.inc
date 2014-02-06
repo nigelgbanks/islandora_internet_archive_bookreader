@@ -54,6 +54,16 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
       'mobilize' => variable_get('islandora_internet_archive_bookreader_mobile_full_screen', FALSE),
     ),
   );
+
+  // Add the required jQuery version, specifying weight.
+  drupal_add_js("$module_path/js/jquery_1_5.min.js",
+    array(
+      'scope' => 'header',
+      'group' => JS_LIBRARY,
+      'every_page' => TRUE,
+      'weight' => -20,
+    )
+  );
   drupal_add_js($data_array, 'setting');
   drupal_add_js("$module_path/js/detectmobilebrowser.js");
   drupal_add_css("$library_path/BookReader/BookReader.css", array(
