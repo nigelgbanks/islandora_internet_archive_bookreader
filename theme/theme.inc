@@ -54,8 +54,8 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
       'mobilize' => variable_get('islandora_internet_archive_bookreader_mobile_full_screen', FALSE),
     ),
   );
+
   drupal_add_js($data_array, 'setting');
-  drupal_add_js("$module_path/js/detectmobilebrowser.js");
   drupal_add_css("$library_path/BookReader/BookReader.css", array(
     'group' => CSS_SYSTEM,
   ));
@@ -65,9 +65,23 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   drupal_add_library('system', 'effects');
   drupal_add_library('system', 'ui.slider');
   drupal_add_library('system', 'ui.draggable');
+
+  // Add the required jQuery version, specifying weight.
+  drupal_add_js("$module_path/js/jquery_1_5.min.js", array(
+    'group' => JS_LIBRARY,
+  ));
+  // We also need to be sure to use the correct jquery ui version.
+  drupal_add_js("$module_path/js/jquery.ui-1.8.10/jquery-ui.min.js", array(
+    'group' => JS_LIBRARY,
+  ));
   drupal_add_js("$library_path/BookReader/dragscrollable.js", array(
     'group' => JS_LIBRARY,
   ));
+  drupal_add_js("$module_path/js/detectmobilebrowser.js",
+    array(
+      'group' => JS_LIBRARY,
+    )
+  );
   // Use a newer version of color box as the version bundled with BookReader
   // won't work with JQuery 1.4.4
   drupal_add_js("$module_path/js/jquery.colorbox-min.js", array(
@@ -79,10 +93,15 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   drupal_add_js("$library_path/BookReader/BookReader.js", array(
     'group' => JS_LIBRARY,
   ));
-  drupal_add_js("$module_path/js/islandora_book_reader.js");
-  drupal_add_js("$module_path/js/islandora_internet_archive_bookreader.js");
+  drupal_add_js("$module_path/js/islandora_book_reader.js",
+    array(
+      'group' => JS_LIBRARY,
+    )
+  );
+  drupal_add_js("$module_path/js/islandora_internet_archive_bookreader.js", array(
+    'group' => JS_LIBRARY,
+  ));
 }
-
 
 /**
  * Implements theme_hook().
