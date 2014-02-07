@@ -3,6 +3,7 @@
  *
  * Defines initializing/attaching the Book Reader to the defined element.
  */
+jQuery.noConflict(true);
 (function ($) {
   Drupal.behaviors.islandoraInternetArchiveBookReader = {
     attach: function(context, settings) {
@@ -16,7 +17,6 @@
           $('#textSrch').hide();
           $('#btnSrch').hide();
         }
-
         if ($.browser.mobile && settings.islandoraInternetArchiveBookReader.mobilize) {
           bookReader.goFullScreen();
         }
