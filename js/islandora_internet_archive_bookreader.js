@@ -1,6 +1,6 @@
 /**
- * Defines initializing/attaching the Book Reader to the
  * @file
+ * Defines initializing/attaching the Book Reader to the
  * defined element.
  */
 
