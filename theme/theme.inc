@@ -66,6 +66,17 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   drupal_add_library('system', 'ui.slider');
   drupal_add_library('system', 'ui.draggable');
 
+  // XXX: Extra slash is NOT an error or a mistake. We need to add this JS
+  // both before and after our custom JQuery gets setup, as we need it in both
+  // instances of jQuery.
+  drupal_add_js("$library_path/BookReader//jquery.bt.min.js", array(
+    'group' => JS_LIBRARY,
+  ));
+  drupal_add_js("$module_path/js/detectmobilebrowser.js",
+    array(
+      'group' => JS_LIBRARY,
+    )
+  );
   // Add the required jQuery version, specifying weight.
   drupal_add_js("$module_path/js/jquery_1_5.min.js", array(
     'group' => JS_LIBRARY,
@@ -77,11 +88,6 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   drupal_add_js("$library_path/BookReader/dragscrollable.js", array(
     'group' => JS_LIBRARY,
   ));
-  drupal_add_js("$module_path/js/detectmobilebrowser.js",
-    array(
-      'group' => JS_LIBRARY,
-    )
-  );
   // Use a newer version of color box as the version bundled with BookReader
   // won't work with JQuery 1.4.4
   drupal_add_js("$module_path/js/jquery.colorbox-min.js", array(
