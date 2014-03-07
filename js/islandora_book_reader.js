@@ -183,7 +183,7 @@
       'url_ver': 'Z39.88-2004',
       'svc_id': 'info:lanl-repo/svc/getRegion',
       'svc_val_fmt': 'info:ofi/fmt:kev:mtx:jpeg2000',
-      'svc.format': 'image/png',
+      'svc.format': 'image/jpeg',
       'svc.level': this.settings.compression,
       'svc.rotate': 0,
     });
