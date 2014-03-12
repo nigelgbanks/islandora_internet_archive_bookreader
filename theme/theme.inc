@@ -107,6 +107,14 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   drupal_add_js("$module_path/js/islandora_internet_archive_bookreader.js", array(
     'group' => JS_LIBRARY,
   ));
+  // The Internet Archive Book Reader, hijacks the URL anchor '#' for jumping to
+  // particular page # / view modes. Drupal fieldset javascript code
+  // (collapse.js) expects the URL anchor '#' to be a valid HTML ID, and fails
+  // to execute when it is not a valid HTML ID. To get around this we use our
+  // own version of (collapse.js) that ignores this situation.
+  drupal_add_js("$module_path/js/collapse.js", array(
+    'group' => JS_THEME,
+  ));
 }
 
 /**
