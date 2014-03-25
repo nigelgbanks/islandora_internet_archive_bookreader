@@ -115,6 +115,8 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   drupal_add_js("$module_path/js/collapse.js", array(
     'group' => JS_THEME,
   ));
+  // collapse.js requires form.js to be present.
+  drupal_add_js('misc/form.js');
 }
 
 /**
