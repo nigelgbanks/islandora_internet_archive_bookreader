@@ -36,16 +36,16 @@ div#BRnav {
 div#BRfulltext .BRfloat {
   min-width: 385px;
 }
-div#BRfulltext .floatShut {
-  margin: 18px 10px;
-}
 div#BRfulltext .BRfloatMeta {
   overflow: auto;
   height: auto !important;
 }
-div#BRfulltext .BRfloatHead {
-  background: #E2DCC5;  
-  padding: 20px 10px;
+div.BRfloatHead {
+  background-color: #ccc !important;
+  padding: 10px 10px 15px;
+}
+a.floatShut {
+  margin: 12px 10px;
 }
 div.BRpagediv1up {
  overflow: visible;
@@ -105,8 +105,10 @@ div.BRprogresspopup {
  * Used to handle conflict with the colorbox Drupal module
  * pertaining to the textarea
  */
-
-#colorbox, #cboxOverlay, #cboxWrapper {
+#colorbox {
+  top: 335px !important;
+}
+#colorbox, #cboxOverlay, #cboxWrapper, #cboxContent, #cboxLoadedContent {
   max-width: 100%;
   height: 100% !important;
 }
@@ -114,14 +116,11 @@ div.BRprogresspopup {
   background: none; /* Used to eliminate white background */
 }
 #cboxWrapper table {
-  margin: 0.5em; 
+  margin-top: 1em;
 }
 #cboxContent {
   border-color: #E2DCC5;
   padding: 0.5em;
-}
-#cboxLoadedContent {
-  max-width: 100%;
 }
 #cboxMiddleLeft {
   height: 0 !important; /* Positions textarea correctly */
