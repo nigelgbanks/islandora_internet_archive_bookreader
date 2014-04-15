@@ -57,7 +57,7 @@ Also be sure to visit the configuration page for this module, here you can
 modify the default settings and test your connection to Djatoka. Which can be
 found at the following link.
 
-http://<yoursite.com>/admin/islandora/tools/internet_archive_bookreader
+http://<yoursite.com>/admin/islandora/islandora_viewers/internet_archive_bookreader
 
 TROUBLESHOOTING
 ---------------

@@ -10,7 +10,7 @@
  */
 function islandora_internet_archive_bookreader_menu() {
   return array(
-    'admin/islandora/tools/internet_archive_bookreader' => array(
+    'admin/islandora/islandora_viewers/internet_archive_bookreader' => array(
       'title' => 'Internet Archive BookReader',
       'description' => 'Configure the Internet Archive BookReader.',
       'page callback' => 'drupal_get_form',
@@ -76,7 +76,7 @@ function islandora_internet_archive_bookreader_islandora_viewer_info() {
     'islandora_internet_archive_bookreader' => array(
       'label' => t('Internet Archive BookReader'),
       'description' => t('Internet Archive BookReader.'),
-      'configuration' => 'admin/islandora/tools/internet_archive_bookreader',
+      'configuration' => 'admin/islandora/islandora_viewers/internet_archive_bookreader',
       'callback' => 'islandora_internet_archive_bookreader_viewer_callback',
       'model' => array('islandora:bookCModel', 'islandora:newspaperCModel'),
     ),
