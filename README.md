@@ -28,7 +28,7 @@ This module requires that you set up Djatoka, please follow the steps outlined a
 
 ## Configuration
 
-Set the 'djatoka image compression level', 'Solr field relating pages to book PIDs ', 'Overlay Opacity', and select the 'Default page view' in Administration » Islandora » Internet Archive BookReader (admin/islandora/internet_archive_bookreader).
+Set the 'djatoka image compression level', 'Solr field relating pages to book PIDs ', 'Overlay Opacity', and select the 'Default page view' in Administration » Islandora » Islandora Viewers » Internet Archive BookReader (/admin/islandora/islandora_viewers/internet_archive_bookreader).
 
 ![Configuration](http://i.imgur.com/R3AhKpB.png)
 
