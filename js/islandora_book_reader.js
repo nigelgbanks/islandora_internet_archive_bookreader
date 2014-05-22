@@ -512,6 +512,12 @@
       self.toggleFullScreen();
     });
 
+    $(window).keyup(function(e) {
+      if(e.keyCode == 27 && self.fullscreen) {
+        self.toggleFullScreen();
+      }
+    });
+
     $('<div style="display: none;"></div>').append(this.blankShareDiv()).append(this.blankInfoDiv()).append(this.blankFullTextDiv()).appendTo($('body'));
     $('#BRinfo .BRfloatTitle a').attr( {'href': this.bookUrl} ).text(this.bookTitle).addClass('title');
     this.buildInfoDiv($('#BRinfo'));
