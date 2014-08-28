@@ -19,6 +19,7 @@
     this.logoURL = '';
     this.mode = settings.mode
     this.fullscreen = false;
+    this.content_type = settings.content_type;
   }
 
   // Inherit from Internet Archive BookReader class.
@@ -330,7 +331,7 @@
       var errStr  = Drupal.t('No matches were found.');
       var timeout = 1000;
       if (false === results.indexed) {
-        errStr  = "<p>" + Drupal.t("This book hasn't been indexed for searching yet. We've just started indexing it, so search should be available soon. Please try again later. Thanks!") + "</p>";
+        errStr  = "<p>" + Drupal.t("This @content_type hasn't been indexed for searching yet. We've just started indexing it, so search should be available soon. Please try again later. Thanks!", {'@content_type': this.content_type}) + "</p>";
         timeout = 5000;
       }
       $(this.popup).html(errStr);
@@ -375,10 +376,10 @@
       '.thumb': Drupal.t('Thumbnail view'),
       '.print': Drupal.t('Print this page'),
       '.embed': Drupal.t('Embed BookReader'),
-      '.link': Drupal.t('Link to this book (and page)'),
+      '.link': Drupal.t('Link to this @content_type (and page)', {'@content_type': this.content_type}),
       '.bookmark': Drupal.t('Bookmark this page'),
-      '.read': Drupal.t('Read this book aloud'),
-      '.share': Drupal.t('Share this book'),
+      '.read': Drupal.t('Read this @content_type aloud', {'@content_type': this.content_type}),
+      '.share': Drupal.t('Share this @content_type', {'@content_type': this.content_type}),
       '.info': Drupal.t('Info'),
       '.full': Drupal.t('Show fullscreen'),
       '.book_up': Drupal.t('Page up'),
@@ -586,7 +587,7 @@
   IslandoraBookReader.prototype.blankInfoDiv = function() {
     return $([
       '<div class="BRfloat" id="BRinfo">',
-            '<div class="BRfloatHead">' + Drupal.t('About this book'),
+            '<div class="BRfloatHead">' + Drupal.t('About this @content_type', {'@content_type': this.content_type}),
                 '<a class="floatShut" href="javascript:;" onclick="Drupal.settings.islandoraInternetArchiveBookReader_jQuery.fn.colorbox.close();"><span class="shift">' + Drupal.t('Close') + '</span></a>',
             '</div>',
       '</div>'].join('\n'));
@@ -636,14 +637,14 @@
     var bookView = (pageView + '').replace(/#.*/,'');
     var self = this;
     var jForm = $([
-        '<p>' + Drupal.t('Copy and paste one of these options to share this book elsewhere.') + '</p>',
+        '<p>' + Drupal.t('Copy and paste one of these options to share this @content_type elsewhere.', {'@content_type': this.content_type}) + '</p>',
         '<form method="post" action="">',
             '<fieldset>',
                 '<label for="pageview">' + Drupal.t('Link to this page view:') + '</label>',
                 '<input type="text" name="pageview" id="pageview" value="' + pageView + '"/>',
             '</fieldset>',
             '<fieldset>',
-                '<label for="booklink">' + Drupal.t('Link to the book:') + '</label>',
+                '<label for="booklink">' + Drupal.t('Link to the @content_type:', {'@content_type': this.content_type}) + '</label>',
                 '<input type="text" name="booklink" id="booklink" value="' + bookView + '"/>',
             '</fieldset>',
             '<fieldset class="center">',
