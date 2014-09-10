@@ -6,6 +6,27 @@
  */
 
 /**
+ * Implements hooks_requirements().
+ */
+function islandora_internet_archive_bookreader_requirements($phase) {
+  $requirements = array();
+  $t = get_t();
+
+  if (!function_exists('libraries_get_libraries')) {
+    module_enable(array('libraries'));
+  }
+  if (!in_array('colorbox', array_keys(libraries_get_libraries()))) {
+    $readme_link = l($t('README'), drupal_get_path('module', 'islandora_internet_archive_bookreader') . '/README.md');
+     $requirements['colorbox'] = array(
+       'title' => $t('Colorbox library'),
+       'description' => $t('Colorbox library missing; please consult the !readme for installation instructions.', array('!readme' => $readme_link)),
+       'severity' => REQUIREMENT_ERROR,
+     );
+  }
+  return $requirements;
+}
+
+/**
  * Implements hook_uninstall().
  */
 function islandora_internet_archive_bookreader_uninstall() {
