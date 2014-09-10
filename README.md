@@ -14,6 +14,7 @@ This module requires the following modules/libraries:
 * [Tuque](https://github.com/islandora/tuque)
 * [Djatoka](http://sourceforge.net/apps/mediawiki/djatoka/index.php?title=Main_Page)
 * [Islandora Solr Search](https://github.com/Islandora/islandora_solr_search/) (Optional)
+* [Libraries API](https://www.drupal.org/project/libraries)
 * [Colorbox](https://www.drupal.org/project/colorbox)
 
 
