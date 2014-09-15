@@ -14,6 +14,8 @@ This module requires the following modules/libraries:
 * [Tuque](https://github.com/islandora/tuque)
 * [Djatoka](http://sourceforge.net/apps/mediawiki/djatoka/index.php?title=Main_Page)
 * [Islandora Solr Search](https://github.com/Islandora/islandora_solr_search/) (Optional)
+* [Libraries API](https://www.drupal.org/project/libraries)
+* [Colorbox](https://www.drupal.org/project/colorbox)
 
 
 ## Installation
@@ -25,6 +27,8 @@ Download/clone the [Internet Archive BookReader](https://github.com/Islandora/in
 Internet Archive BookReader [Developer documentation](http://openlibrary.org/dev/docs/bookreader)
 
 This module requires that you set up Djatoka, please follow the steps outlined at [here](https://wiki.duraspace.org/pages/viewpage.action?pageId=34658947).
+
+This module requies [Colorbox](https://www.drupal.org/project/colorbox) and its dependant library [Colorbox library](http://www.jacklmoore.com/colorbox/). Depending on the version of the Colorbox module and library you are using, there can be some issues with Colorbox finding the library. [This](https://www.drupal.org/node/1074474#comment-9137159) comment solves the issue.
 
 ## Configuration
 
