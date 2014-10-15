@@ -80,7 +80,7 @@ function islandora_internet_archive_bookreader_islandora_viewer_info() {
       'callback' => 'islandora_internet_archive_bookreader_viewer_callback',
       'model' => array(
         'islandora:bookCModel',
-        'islandora:newspaperCModel',
+        'islandora:newspaperIssueCModel',
         'islandora:manuscriptCModel',
       ),
     ),
