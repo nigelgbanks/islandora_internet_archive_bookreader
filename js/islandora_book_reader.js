@@ -526,26 +526,76 @@
   }
 
   /**
+   * Window resize event callback, handles admin menu
+   * in Drupal.
+   */
+  IslandoraBookReader.prototype.windowResize = function() {
+    if (this.fullscreen && $("#admin-menu").length) {
+      var top = 0;
+      var height = '100%';
+      var admin_bar_height = $("#admin-menu").height();
+      top = admin_bar_height + "px";
+      height = ($(window).height() - admin_bar_height) + "px";
+      this.resetReaderSizeAndStyle(height, top);
+    }
+  }
+
+  /**
+   * Adjust the book viewer required styles in fullscreen.
+   */
+  IslandoraBookReader.prototype.resetReaderSizeAndStyle = function(height, top) {
+    $('div#book-viewer').css({
+      'position': 'fixed',
+      'width': '100%',
+      'height': height,
+      'left': '0',
+      'top': top,
+      'z-index': '700'
+    });
+    this.realignPages();
+  }
+
+  /**
+   * Realign the readers contents, dependant on its current state
+   * (ex: fullscreen).
+   */
+  IslandoraBookReader.prototype.realignPages = function() {
+    $('div#BookReader').css({
+      'height': '100%',
+    });
+    var br_top = '0';
+    if (this.fullscreen) {
+      br_top = $('div#BRtoolbar').height() + 5;
+      console.log(br_top);
+    }
+    br_top += 'px';
+    $('div#BRcontainer').css({
+      'height':'100%',
+      'top':br_top 
+    });
+    //this little hack re-centers the pages
+    this.zoom(1);
+    this.zoom(2);
+  }
+
+  /**
    * Toggle fullscreen viewer.
    */
   IslandoraBookReader.prototype.toggleFullScreen = function() {
     this.fullscreen = (this.fullscreen ? false : true);
     if(this.fullscreen) {
-      $('div#book-viewer').css({
-        'position': 'fixed',
-        'width': '100%',
+      var top = 0;
+      var height = '100%';
+      // Account for the admin menu.
+      if ($("#admin-menu").length) {
+        var admin_bar_height = $("#admin-menu").height();
+        top = admin_bar_height + "px";
+        height = ($(window).height() - admin_bar_height) + "px";
+      }
+      this.resetReaderSizeAndStyle(height, top);
+      $('div#BookReader').css({
         'height': '100%',
-        'left': '0',
-        'top': '0',
-        'z-index': '700'
       });
-      $('div#BookReader, div#BRcontainer').css({
-        'height': '100%'
-      });
-      //this little hack re-centers the pages
-      this.zoom(1);
-      this.zoom(2);
-
     }
     else {
       $('div#book-viewer').css({
@@ -555,6 +605,9 @@
       $('div#BookReader, div#BRcontainer').css({
         'height': '680px'
       });
+      $('div#BRcontainer').css({
+        'top': '0px'
+      });
       this.zoom(1);
       this.zoom(2);
     }
@@ -563,24 +616,24 @@
   /**
    * Go Fullscreen regardless of current state.
    */
-   IslandoraBookReader.prototype.goFullScreen = function() {
+  IslandoraBookReader.prototype.goFullScreen = function() {
     this.fullscreen = true;
-        $('div#book-viewer').css({
-            'position': 'fixed',
-            'width': '100%',
-            'height': '100%',
-            'left': '0',
-            'top': '0',
-            'z-index': '700'
-        });
-        $('div#BookReader, div#BRcontainer').css({
-            'height': '100%'
-        });
-        //this little hack re-centers the pages
-        this.zoom(1);
-        this.zoom(2);
-
+    $('div#book-viewer').css({
+      'position': 'fixed',
+      'width': '100%',
+      'height': '100%',
+      'left': '0',
+      'top': top,
+      'z-index': '700'
+    });
+    $('div#BookReader, div#BRcontainer').css({
+      'height': '100%'
+    });
+    //this little hack re-centers the pages
+    this.zoom(1);
+    this.zoom(2);
   }
+
   /**
    * The default look of the "Info" modal dialog box.
    */
