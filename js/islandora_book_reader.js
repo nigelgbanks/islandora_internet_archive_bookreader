@@ -566,7 +566,6 @@
     var br_top = '0';
     if (this.fullscreen) {
       br_top = $('div#BRtoolbar').height() + 5;
-      console.log(br_top);
     }
     br_top += 'px';
     $('div#BRcontainer').css({

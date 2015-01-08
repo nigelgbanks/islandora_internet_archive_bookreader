@@ -17,7 +17,7 @@ Drupal.settings.islandoraInternetArchiveBookReader_jQuery = jQuery.noConflict(tr
         // Initialize and Render the BookReader.
         bookReader.init();
         // Handle page resize, required for full screen.
-        $( window ).resize(function() {
+        $(window).resize(function() {
           bookReader.windowResize();
         });
         // We currently don't support read-aloud.
