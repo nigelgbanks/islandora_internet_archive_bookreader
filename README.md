@@ -34,7 +34,7 @@ This module requires [Colorbox](https://www.drupal.org/project/colorbox) and its
 
 Set the 'djatoka image compression level', 'Solr field relating pages to book PIDs ', 'Overlay Opacity', and select the 'Default page view' in Administration » Islandora » Islandora Viewers » Internet Archive BookReader (/admin/islandora/islandora_viewers/internet_archive_bookreader).
 
-![Configuration](http://i.imgur.com/R3AhKpB.png)
+![Configuration](https://camo.githubusercontent.com/aa7eedad6565217229eba6020baafafd67d42c76/687474703a2f2f692e696d6775722e636f6d2f523341684b70422e706e67)
 
 ## Troubleshooting/Issues
 
