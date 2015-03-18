@@ -220,7 +220,7 @@
     if (typeof this.settings.pages[index] != 'undefined') {
       var resource_uri = this.settings.pages[index].uri;
       if (this.getPageFileSize < this.settings.minimumFileSize) {
-        resource_uri = this.settings.pages[index].backupURI;
+        resource_uri = this.settings.pages[index].backupUri;
       }
       return this.getDjatokaUri(resource_uri);
     }
