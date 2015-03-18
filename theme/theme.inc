@@ -12,6 +12,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   module_load_include('inc', 'islandora_internet_archive_bookreader', 'includes/utilities');
   $object = $variables['object'];
   $dsid = $variables['datastream_id'];
+  $backup_dsid = variable_get('islandora_internet_archive_bookreader_backup_dsid', 'JPG');
   $library_path = libraries_get_path('bookreader');
   $colorbox_path = libraries_get_path('colorbox');
   $module_path = drupal_get_path('module', 'islandora_internet_archive_bookreader');
@@ -21,6 +22,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   $pages = array();
   foreach ($variables['pages'] as $page_pid => $info) {
     $token = islandora_get_object_token($page_pid, $dsid, 2);
+    $backup_token = islandora_get_object_token($page_pid, $backup_dsid, 2);
 
     // TODO: Slap the widths/heights for pages in here, and make 'em be used in
     // on the JS side...  Probably break out this structure generation into a
@@ -30,6 +32,12 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
         'absolute' => TRUE,
         'query' => array(
           'token' => $token,
+        ),
+      )),
+      'backupUri' => url("islandora/object/{$page_pid}/datastream/{$backup_dsid}/view", array(
+        'absolute' => TRUE,
+        'query' => array(
+          'token' => $backup_token,
         ),
       )),
     );
@@ -54,6 +62,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
       'mode' => (int) variable_get('islandora_internet_archive_bookreader_default_page_view', 1),
       'mobilize' => variable_get('islandora_internet_archive_bookreader_mobile_full_screen', FALSE),
       'content_type' => variable_get('islandora_internet_archive_bookreader_content_type', 'book'),
+      'minimumFileSize' => variable_get('islandora_internet_archive_bookreader_minimum_jp2_size', '10000'),
     ),
   );
 
