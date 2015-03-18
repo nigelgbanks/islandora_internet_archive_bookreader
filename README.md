@@ -1,72 +1,60 @@
-BUILD STATUS
-------------
-Current build status:
-[![Build Status](https://travis-ci.org/Islandora/islandora_internet_archive_bookreader.png?branch=7.x)](https://travis-ci.org/Islandora/islandora_internet_archive_bookreader)
+# Islandora Internet Archive BookReader [![Build Status](https://travis-ci.org/Islandora/islandora_internet_archive_bookreader.png?branch=7.x)](https://travis-ci.org/Islandora/islandora_internet_archive_bookreader)
 
-CI Server:
-http://jenkins.discoverygarden.ca
-
-ISLANDORA INTERNET ARCHIVE BOOKREADER
-==================
-
-CONTENTS OF THIS FILE
----------------------
-
- * summary
- * requirements
- * installation
- * configuration
- * troubleshooting
-
-SUMMARY
--------
+## Introduction
 
 A Islandora wrapper for the Internet Archive BookReader.
-The source code license is AGPL v3, as described in the LICENSE file.
 
-This module doesn't do much on its own, its assummed that it will be used in
-conjunction with a solution pack, where it will be provided as a viewer.
+This module doesn't do much on its own, its assummed that it will be used in conjunction with a solution pack, where it will be provided as a viewer.
 
-REQUIREMENTS
-------------
+## Requirements
 
-Internet Archive BookReader
-Djatoka
-Solr (Optional)
+This module requires the following modules/libraries:
 
-INSTALLATION
-------------
+* [Islandora](https://github.com/islandora/islandora)
+* [Tuque](https://github.com/islandora/tuque)
+* [Djatoka](http://sourceforge.net/apps/mediawiki/djatoka/index.php?title=Main_Page)
+* [Islandora Solr Search](https://github.com/Islandora/islandora_solr_search/) (Optional)
+* [Libraries API](https://www.drupal.org/project/libraries)
+* [Colorbox](https://www.drupal.org/project/colorbox)
 
-Download the Internet Archive BookReader to sites/all/libraries/bookreader.
 
-Developer documentation:
-http://openlibrary.org/dev/docs/bookreader
+## Installation
 
-Hosted source code:
-https://github.com/Islandora/internet_archive_bookreader.git
+Install as usual, see [this](https://drupal.org/documentation/install/modules-themes/modules-7) for further information.
 
-CONFIGURATION
--------------
+Download/clone the [Internet Archive BookReader](https://github.com/Islandora/internet_archive_bookreader.git) to `sites/all/libraries/bookreader`, or run `drush iabookreader-plugin`.
 
-This module requires that you set up Djatoka, please follow the steps outlined
-at the following link.
+Internet Archive BookReader [Developer documentation](http://openlibrary.org/dev/docs/bookreader)
 
-https://wiki.duraspace.org/display/ISLANDORA6121/Chapter+12+-+Installing+Solution+Pack+Dependencies
+This module requires that you set up Djatoka, please follow the steps outlined at [here](https://wiki.duraspace.org/pages/viewpage.action?pageId=34658947).
 
-Also be sure to visit the configuration page for this module, here you can
-modify the default settings and test your connection to Djatoka. Which can be
-found at the following link.
+This module requires [Colorbox](https://www.drupal.org/project/colorbox) and its dependant library [Colorbox library](http://www.jacklmoore.com/colorbox/). Depending on the version of the Colorbox module and library you are using, there can be some issues with Colorbox finding the library. [This](https://www.drupal.org/node/1074474#comment-9137159) comment solves the issue.
 
-http://<yoursite.com>/admin/islandora/internet_archive_bookreader
+Note: If you use the Drush command, it is advisable to Move (not copy) the install script to your `.drush` folder and run it.
 
-TROUBLESHOOTING
----------------
+## Configuration
 
-Having problems/Solved a problem? Check out the Islandora google groups for a
-solution.
+Set the 'djatoka image compression level', 'Solr field relating pages to book PIDs ', 'Overlay Opacity', and select the 'Default page view' in Administration » Islandora » Islandora Viewers » Internet Archive BookReader (/admin/islandora/islandora_viewers/internet_archive_bookreader).
 
-Islandora Group:
-https://groups.google.com/forum/?hl=en&fromgroups#!forum/islandora
+![Configuration](https://camo.githubusercontent.com/aa7eedad6565217229eba6020baafafd67d42c76/687474703a2f2f692e696d6775722e636f6d2f523341684b70422e706e67)
 
-Islandora Dev Group:
-https://groups.google.com/forum/?hl=en&fromgroups#!forum/islandora-dev
+## Troubleshooting/Issues
+
+Having problems or solved a problem? Check out the Islandora google groups for a solution.
+
+* [Islandora Group](https://groups.google.com/forum/?hl=en&fromgroups#!forum/islandora)
+* [Islandora Dev Group](https://groups.google.com/forum/?hl=en&fromgroups#!forum/islandora-dev)
+
+## Maintainers/Sponsors
+
+Current maintainers:
+
+* [Nigel Banks](https://github.com/nigelgbanks)
+
+## Development
+
+If you would like to contribute to this module, please check out our helpful [Documentation for Developers](https://github.com/Islandora/islandora/wiki#wiki-documentation-for-developers) info, as well as our [Developers](http://islandora.ca/developers) section on the Islandora.ca site.
+
+## License
+
+[GPLv3](http://www.gnu.org/licenses/gpl-3.0.txt)

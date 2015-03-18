@@ -13,6 +13,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   $object = $variables['object'];
   $dsid = $variables['datastream_id'];
   $library_path = libraries_get_path('bookreader');
+  $colorbox_path = libraries_get_path('colorbox');
   $module_path = drupal_get_path('module', 'islandora_internet_archive_bookreader');
   $search_uri = module_exists('islandora_solr') ? url("internet_archive_bookreader_search/{$object->id}/TERM", array('absolute' => TRUE)) : NULL;
 
@@ -52,10 +53,11 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
       'overlayOpacity' => variable_get('islandora_internet_archive_bookreader_overlay_opacity', '0.5'),
       'mode' => (int) variable_get('islandora_internet_archive_bookreader_default_page_view', 1),
       'mobilize' => variable_get('islandora_internet_archive_bookreader_mobile_full_screen', FALSE),
+      'content_type' => variable_get('islandora_internet_archive_bookreader_content_type', 'book'),
     ),
   );
+
   drupal_add_js($data_array, 'setting');
-  drupal_add_js("$module_path/js/detectmobilebrowser.js");
   drupal_add_css("$library_path/BookReader/BookReader.css", array(
     'group' => CSS_SYSTEM,
   ));
@@ -65,12 +67,32 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   drupal_add_library('system', 'effects');
   drupal_add_library('system', 'ui.slider');
   drupal_add_library('system', 'ui.draggable');
+
+  // XXX: Extra slash is NOT an error or a mistake. We need to add this JS
+  // both before and after our custom jQuery gets setup, as we need it in both
+  // instances of jQuery.
+  drupal_add_js("$library_path/BookReader//jquery.bt.min.js", array(
+    'group' => JS_LIBRARY,
+  ));
+  drupal_add_js("$module_path/js/detectmobilebrowser.js",
+    array(
+      'group' => JS_LIBRARY,
+    )
+  );
+  // Add the required jQuery version, specifying weight.
+  drupal_add_js("$module_path/js/jquery_1_5.min.js", array(
+    'group' => JS_LIBRARY,
+  ));
+  // We also need to be sure to use the correct jquery ui version.
+  drupal_add_js("$module_path/js/jquery.ui-1.8.10/jquery-ui.min.js", array(
+    'group' => JS_LIBRARY,
+  ));
   drupal_add_js("$library_path/BookReader/dragscrollable.js", array(
     'group' => JS_LIBRARY,
   ));
   // Use a newer version of color box as the version bundled with BookReader
   // won't work with JQuery 1.4.4
-  drupal_add_js("$module_path/js/jquery.colorbox-min.js", array(
+  drupal_add_js("$colorbox_path/jquery.colorbox-min.js", array(
     'group' => JS_LIBRARY,
   ));
   drupal_add_js("$library_path/BookReader/jquery.bt.min.js", array(
@@ -79,29 +101,58 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   drupal_add_js("$library_path/BookReader/BookReader.js", array(
     'group' => JS_LIBRARY,
   ));
-  drupal_add_js("$module_path/js/islandora_book_reader.js");
-  drupal_add_js("$module_path/js/islandora_internet_archive_bookreader.js");
+  drupal_add_js("$module_path/js/islandora_book_reader.js",
+    array(
+      'group' => JS_LIBRARY,
+    )
+  );
+  drupal_add_js("$module_path/js/islandora_internet_archive_bookreader.js", array(
+    'group' => JS_LIBRARY,
+  ));
+  // The Internet Archive Book Reader, hijacks the URL anchor '#' for jumping to
+  // particular page # / view modes. Drupal fieldset javascript code
+  // (collapse.js) expects the URL anchor '#' to be a valid HTML ID, and fails
+  // to execute when it is not a valid HTML ID. To get around this we use our
+  // own version of (collapse.js) that ignores this situation.
+  drupal_add_js("$module_path/js/collapse.js", array(
+    'group' => JS_THEME,
+  ));
+  // collapse.js requires form.js to be present.
+  drupal_add_js('misc/form.js');
 }
 
 /**
  * Implements theme_hook().
  */
 function theme_islandora_internet_archive_bookreader_book_info(array $variables) {
+  module_load_include('inc', 'islandora', 'includes/metadata');
+
   $object = $variables['object'];
-  $fields = islandora_internet_archive_bookreader_info_fields($object);
-  $convert_to_string = function($o) {
-    return implode('<br/>', $o);
-  };
-  $fields = array_map($convert_to_string, $fields);
-  $rows = array_map(NULL, array_keys($fields), array_values($fields));
-  $content = theme('table', array(
-               'caption' => '',
-               'empty' => t('No Information specified.'),
-               'attributes' => array(),
-               'colgroups' => array(),
-               'header' => array(t('Field'), t('Values')),
-               'rows' => $rows,
-               'sticky' => FALSE));
+
+  // As IAV presents the metadata within a Colorbox window request for the
+  // metadata in printable form.
+  $metadata = islandora_retrieve_metadata_markup($object, TRUE);
+  $viewer = variable_get('islandora_metadata_display', 'dublin_core');
+  // Let's default back to what IAV had before for a default.
+  if ($viewer != 'dublin_core' && $metadata) {
+    $content = $metadata;
+  }
+  else {
+    $fields = islandora_internet_archive_bookreader_info_fields($object);
+    $convert_to_string = function($o) {
+      return implode('<br/>', $o);
+    };
+    $fields = array_map($convert_to_string, $fields);
+    $rows = array_map(NULL, array_keys($fields), array_values($fields));
+    $content = theme('table', array(
+      'caption' => '',
+      'empty' => t('No Information specified.'),
+      'attributes' => array(),
+      'colgroups' => array(),
+      'header' => array(t('Field'), t('Values')),
+      'rows' => $rows,
+      'sticky' => FALSE));
+  }
   return $content;
 }
 
