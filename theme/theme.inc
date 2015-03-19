@@ -12,7 +12,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   module_load_include('inc', 'islandora_internet_archive_bookreader', 'includes/utilities');
   $object = $variables['object'];
   $dsid = $variables['datastream_id'];
-  $backup_dsid = variable_get('islandora_internet_archive_bookreader_backup_dsid', 'JPG');
+  $backup_dsid = $variables['backup_datastream_id'];
   $library_path = libraries_get_path('bookreader');
   $colorbox_path = libraries_get_path('colorbox');
   $module_path = drupal_get_path('module', 'islandora_internet_archive_bookreader');
