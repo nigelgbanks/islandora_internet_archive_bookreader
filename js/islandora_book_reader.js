@@ -218,31 +218,15 @@
    */
   IslandoraBookReader.prototype.getPageURI = function(index, reduce, rotate) {
     if (typeof this.settings.pages[index] != 'undefined') {
-      var resource_uri = this.settings.pages[index].uri;
-      if (this.getPageFileSize < this.settings.minimumFileSize) {
-        resource_uri = this.settings.pages[index].backupUri;
-      }
+      var resource_uri = null;
+      $.ajax({
+        url: this.settings.tokenUri.replace('PID', this.settings.pages[index].pid),
+        async: false,
+        success: function(data, textStatus, jqXHR) {
+          resource_uri = data;
+        }
+      });
       return this.getDjatokaUri(resource_uri);
-    }
-  }
-
-  /**
-   * Gets the size of the image at the given URI.
-   * Using XMLHttpRequest so that we don't have to load the whole image.
-   *
-   * @param string uri
-   *   The URI.
-   *
-   * @return int
-   *   The size of the file.
-   */
-  IslandoraBookReader.prototype.getPageFileSize = function(uri) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('HEAD', uri, true);
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      var size = xhr.getResponseHeader('Content-Length');
-      xhr.send(null);
-      return size;
     }
   }
 

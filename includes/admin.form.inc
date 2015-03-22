@@ -69,11 +69,11 @@ function islandora_internet_archive_bookreader_admin_settings_form(array $form, 
     // below a filesize that appears to be completely undocumented. Should do
     // some testing to determine the exact number, but setting at 10kb for now.
     'islandora_internet_archive_bookreader_minimum_jp2_size' => array(
-        '#type' => 'textfield',
-        '#title' => t('Minimum JP2 Size'),
-        '#description' => t('Set the default minimum JP2 size, in bytes. Any images below this size will default to the JPG datastream instead.'),
-        '#default_value' => variable_get('islandora_internet_archive_bookreader_minimum_jp2_size', 10000),
-        '#element_validate' => array('element_validate_integer'),
+      '#type' => 'textfield',
+      '#title' => t('Minimum JP2 Size'),
+      '#description' => t('Set the default minimum JP2 size, in bytes. Any images below this size will default to the JPG datastream instead.'),
+      '#default_value' => variable_get('islandora_internet_archive_bookreader_minimum_jp2_size', 10000),
+      '#element_validate' => array('element_validate_integer'),
     ),
   );
   return system_settings_form($form);

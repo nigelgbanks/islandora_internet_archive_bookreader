@@ -18,29 +18,9 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   $module_path = drupal_get_path('module', 'islandora_internet_archive_bookreader');
   $search_uri = module_exists('islandora_solr') ? url("internet_archive_bookreader_search/{$object->id}/TERM", array('absolute' => TRUE)) : NULL;
 
-  module_load_include('inc', 'islandora', 'includes/authtokens');
   $pages = array();
   foreach ($variables['pages'] as $page_pid => $info) {
-    $token = islandora_get_object_token($page_pid, $dsid, 2);
-    $backup_token = islandora_get_object_token($page_pid, $backup_dsid, 2);
-
-    // TODO: Slap the widths/heights for pages in here, and make 'em be used in
-    // on the JS side...  Probably break out this structure generation into a
-    // separate function?
-    $pages[] = $info + array(
-      'uri' => url("islandora/object/{$page_pid}/datastream/{$dsid}/view", array(
-        'absolute' => TRUE,
-        'query' => array(
-          'token' => $token,
-        ),
-      )),
-      'backupUri' => url("islandora/object/{$page_pid}/datastream/{$backup_dsid}/view", array(
-        'absolute' => TRUE,
-        'query' => array(
-          'token' => $backup_token,
-        ),
-      )),
-    );
+    $pages[] = $info + array('pid' => $page_pid);
   }
 
   global $base_url;
@@ -52,6 +32,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
       'searchUri' => $search_uri,
       'textUri' => url('internet_archive_bookreader_text/PID', array('absolute' => TRUE)),
       'dimensionsUri' => url('internet_archive_bookreader_dimensions/PID', array('absolute' => TRUE)),
+      'tokenUri' => url('internet_archive_bookreader_get_image_uri/PID', array('absolute' => TRUE)),
       'djatokaUri' => variable_get('islandora_paged_content_djatoka_url', 'http://localhost:8080/adore-djatoka'),
       'imagesFolderUri' => url("$base_url/$library_path/BookReader/images/", array('absolute' => TRUE, 'external' => TRUE)),
       'compression' => variable_get('islandora_internet_archive_bookreader_compression', '4'),
