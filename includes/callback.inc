@@ -90,8 +90,10 @@ function islandora_internet_archive_bookreader_search_callback($object_id, $term
 function islandora_internet_archive_bookreader_get_image_uri_callback($object_id) {
   module_load_include('inc', 'islandora', 'includes/authtokens');
   $jp2 = islandora_datastream_load('JP2', $object_id);
-  $minimum_jp2_size = variable_get('islandora_internet_archive_bookreader_minimum_jp2_size', 10000);
-  if ($jp2->size >= $minimum_jp2_size) {
+  // TODO: We _think_ that Djatoka won't accept JP2s under 4 kibibytes, but
+  // it's unclear if that number is configured, or tied to something, or even
+  // if it's correct. We should investigate and make sure it's accurate.
+  if ($jp2->size >= 4096) {
     $uri = url("islandora/object/{$object_id}/datastream/JP2/view", array(
       'absolute' => TRUE,
       'query' => array(
