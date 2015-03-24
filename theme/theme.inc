@@ -10,6 +10,7 @@
  */
 function islandora_internet_archive_bookreader_preprocess_islandora_internet_archive_bookreader(array &$variables) {
   module_load_include('inc', 'islandora_internet_archive_bookreader', 'includes/utilities');
+  module_load_include('inc', 'islandora', 'includes/authtokens');
   $object = $variables['object'];
   $dsid = $variables['datastream_id'];
   $library_path = libraries_get_path('bookreader');
@@ -20,7 +21,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
 
   $pages = array();
   foreach ($variables['pages'] as $page_pid => $info) {
-    $pages[] = $info + $backup_uris ? array('pid' => $page_pid) : array(
+    $addendum = $backup_uris ? array('pid' => $page_pid) : array(
       'uri' => url("islandora/object/{$page_pid}/datastream/{$dsid}/view", array(
         'absolute' => TRUE,
         'query' => array(
@@ -28,6 +29,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
         ),
       )),
     );
+    $pages[] = $info + $addendum;
   }
 
   global $base_url;
