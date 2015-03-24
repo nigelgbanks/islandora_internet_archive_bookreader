@@ -70,6 +70,7 @@ function islandora_internet_archive_bookreader_admin_settings_form(array $form, 
       '#title' => t('Use the JPG datastream as a backup'),
       '#description' => t('Djatoka will not return JP2s smaller than 4096 bytes; by checking this, the bookreader will run a check and use the JPG datastream instead. NOTE: applying this setting can slow the bookreader down, especially for busy sites or large books. Be sure only to use this if necessary.'),
       '#default_value' => variable_get('islandora_internet_archive_bookreader_use_backup_dsid', FALSE),
+    ),
   );
   return system_settings_form($form);
 }

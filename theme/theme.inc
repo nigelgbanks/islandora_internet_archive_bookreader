@@ -21,12 +21,13 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   $pages = array();
   foreach ($variables['pages'] as $page_pid => $info) {
     $pages[] = $info + $backup_uris ? array('pid' => $page_pid) : array(
-      'uri' => url("islandora/object/{$page_pid}/datastream.$dsid/view", array(
+      'uri' => url("islandora/object/{$page_pid}/datastream/{$dsid}/view", array(
         'absolute' => TRUE,
         'query' => array(
           'token' => islandora_get_object_token($page_pid, $dsid, 2),
         ),
-    )));
+      )),
+    );
   }
 
   global $base_url;
