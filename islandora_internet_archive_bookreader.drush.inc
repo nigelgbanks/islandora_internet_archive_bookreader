@@ -11,6 +11,11 @@
 define('IABOOKREADER_DOWNLOAD_URI', 'https://github.com/Islandora/internet_archive_bookreader/archive/master.zip');
 
 /**
+ * The original extracted directory frome the zip file.
+ */
+define('IABOOKREADER_ORIGINAL_DIR', 'internet_archive_bookreader-master');
+
+/**
  * Implements hook_drush_command().
  */
 function islandora_internet_archive_bookreader_drush_command() {
@@ -48,7 +53,7 @@ function drush_islandora_internet_archive_bookreader_plugin() {
     $path = $args[0];
   }
   else {
-    $path = 'sites/all/libraries';
+    $path = _drush_core_directory("@site:sites/all/libraries");
   }
 
   // Create the path if it does not exist.
@@ -64,7 +69,7 @@ function drush_islandora_internet_archive_bookreader_plugin() {
   // Download the zip archive.
   if ($filepath = drush_download_file(IABOOKREADER_DOWNLOAD_URI)) {
     $filename = basename($filepath);
-    $dirname = 'iabookreader';
+    $dirname = IABOOKREADER_ORIGINAL_DIR;
 
     // Remove any existing Internet Archive Bookreader plugin directory.
     if (is_dir($dirname) || is_dir('iabookreader')) {
