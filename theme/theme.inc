@@ -26,7 +26,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
         'query' => array(
           'token' => islandora_get_object_token($page_pid, $dsid, 2),
         ),
-    );
+    )));
   }
 
   global $base_url;
