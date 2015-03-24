@@ -16,10 +16,17 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   $colorbox_path = libraries_get_path('colorbox');
   $module_path = drupal_get_path('module', 'islandora_internet_archive_bookreader');
   $search_uri = module_exists('islandora_solr') ? url("internet_archive_bookreader_search/{$object->id}/TERM", array('absolute' => TRUE)) : NULL;
+  $backup_uris = variable_get('islandora_internet_archive_bookreader_use_backup_dsid', FALSE);
 
   $pages = array();
   foreach ($variables['pages'] as $page_pid => $info) {
-    $pages[] = $info + array('pid' => $page_pid);
+    $pages[] = $info + $backup_uris ? array('pid' => $page_pid) : array(
+      'uri' => url("islandora/object/{$page_pid}/datastream.$dsid/view", array(
+        'absolute' => TRUE,
+        'query' => array(
+          'token' => islandora_get_object_token($page_pid, $dsid, 2),
+        ),
+    );
   }
 
   global $base_url;
@@ -42,6 +49,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
       'mode' => (int) variable_get('islandora_internet_archive_bookreader_default_page_view', 1),
       'mobilize' => variable_get('islandora_internet_archive_bookreader_mobile_full_screen', FALSE),
       'content_type' => variable_get('islandora_internet_archive_bookreader_content_type', 'book'),
+      'useBackupUri' => variable_get('islandora_internet_archive_bookreader_use_backup_dsid', FALSE),
     ),
   );
 
