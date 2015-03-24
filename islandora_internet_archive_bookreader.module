@@ -43,6 +43,14 @@ function islandora_internet_archive_bookreader_menu() {
       'file' => 'includes/callback.inc',
       'type' => MENU_CALLBACK,
     ),
+    'internet_archive_bookreader_get_image_uri/%islandora_object' => array(
+      'page callback' => 'islandora_internet_archive_bookreader_get_image_uri_callback',
+      'page arguments' => array(1),
+      'access callback' => 'islandora_object_access_callback',
+      'access arguments' => array(ISLANDORA_VIEW_OBJECTS, 1),
+      'file' => 'includes/callback.inc',
+      'type' => MENU_CALLBACK,
+    ),
   );
 }
 

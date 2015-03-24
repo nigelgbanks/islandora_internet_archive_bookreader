@@ -8,6 +8,7 @@
  * - Dimensions: Returns the page dimensions in JSON.
  * - Text: Returns the OCR'd page text as an html string.
  * - Search: Returns solr search results and word coordinates as JSON.
+ * - Image URI: gets a valid URI with token for the DSID.
  */
 
 /**
@@ -75,5 +76,39 @@ function islandora_internet_archive_bookreader_search_callback($object_id, $term
   ));
   $results = islandora_internet_archive_bookreader_remap_highlighting_for_bookreader_results($results);
   drupal_json_output($results);
+  drupal_exit();
+}
+
+/**
+ * Callback for the view URI of a page image datastream to send to Djatoka.
+ *
+ * Should contain JP2/JPG datastreams.
+ *
+ * @param string $object_id
+ *   The DSID of the object with JP2/JPG datastreams.
+ */
+function islandora_internet_archive_bookreader_get_image_uri_callback($object_id) {
+  module_load_include('inc', 'islandora', 'includes/authtokens');
+  $jp2 = islandora_datastream_load('JP2', $object_id);
+  // TODO: We _think_ that Djatoka won't accept JP2s under 4 kibibytes, but
+  // it's unclear if that number is configured, or tied to something, or even
+  // if it's correct. We should investigate and make sure it's accurate.
+  if ($jp2->size >= 4096) {
+    $uri = url("islandora/object/{$object_id}/datastream/JP2/view", array(
+      'absolute' => TRUE,
+      'query' => array(
+        'token' => islandora_get_object_token($object_id, 'JP2', 2),
+      ),
+    ));
+  }
+  else {
+    $uri = url("islandora/object/{$object_id}/datastream/JPG/view", array(
+      'absolute' => TRUE,
+      'query' => array(
+        'token' => islandora_get_object_token($object_id, 'JPG', 2),
+      ),
+    ));
+  }
+  echo $uri;
   drupal_exit();
 }

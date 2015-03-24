@@ -218,7 +218,19 @@
    */
   IslandoraBookReader.prototype.getPageURI = function(index, reduce, rotate) {
     if (typeof this.settings.pages[index] != 'undefined') {
-      var resource_uri = this.settings.pages[index].uri;
+      var resource_uri = null;
+      if (this.settings.useBackupUri == true) {
+        $.ajax({
+          url: this.settings.tokenUri.replace('PID', this.settings.pages[index].pid),
+          async: false,
+          success: function(data, textStatus, jqXHR) {
+            resource_uri = data;
+          }
+        });
+      }
+      else {
+        resource_uri = this.settings.pages[index].uri
+      }
       return this.getDjatokaUri(resource_uri);
     }
   }
