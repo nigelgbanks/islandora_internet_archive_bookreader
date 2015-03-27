@@ -227,11 +227,14 @@
             resource_uri = data;
           }
         });
+        if (resource_uri.indexOf("datastream/JP2/view") != -1) {
+          resource_uri = this.getDjatokaUri(resource_uri);
+        }
       }
       else {
-        resource_uri = this.settings.pages[index].uri
+        resource_uri = this.getDjatokaUri(this.settings.pages[index].uri);
       }
-      return this.getDjatokaUri(resource_uri);
+      return resource_uri;
     }
   }
 
