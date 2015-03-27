@@ -52,7 +52,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
       'mode' => (int) variable_get('islandora_internet_archive_bookreader_default_page_view', 1),
       'mobilize' => variable_get('islandora_internet_archive_bookreader_mobile_full_screen', FALSE),
       'content_type' => variable_get('islandora_internet_archive_bookreader_content_type', 'book'),
-      'useBackupUri' => variable_get('islandora_internet_archive_bookreader_use_backup_dsid', FALSE),
+      'useBackupUri' => $backup_uris,
     ),
   );
 

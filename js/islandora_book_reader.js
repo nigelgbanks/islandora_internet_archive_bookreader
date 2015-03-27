@@ -218,20 +218,26 @@
    */
   IslandoraBookReader.prototype.getPageURI = function(index, reduce, rotate) {
     if (typeof this.settings.pages[index] != 'undefined') {
-      var resource_uri = null;
+      // Using backups? Get the image URI via callback and determine whether to
+      // Djatoka-ize it.
       if (this.settings.useBackupUri == true) {
+        var callback_uri = null;
         $.ajax({
           url: this.settings.tokenUri.replace('PID', this.settings.pages[index].pid),
           async: false,
           success: function(data, textStatus, jqXHR) {
-            resource_uri = data;
+            callback_uri = data;
           }
         });
+        if (callback_uri.indexOf("datastream/JP2/view") != -1) {
+          return this.getDjatokaUri(callback_uri);
+        }
+        return callback_uri;
       }
+      // Not using backups? Just Djatoka-ize the page's image URI.
       else {
-        resource_uri = this.settings.pages[index].uri
+        return this.getDjatokaUri(this.settings.pages[index].uri);
       }
-      return this.getDjatokaUri(resource_uri);
     }
   }
 
